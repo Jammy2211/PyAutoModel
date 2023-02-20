@@ -1,12 +1,10 @@
-import numpy as np
+import jax.numpy as np
 from typing import Optional, Tuple
 
 import autoarray as aa
 
 from autogalaxy.profiles.light.abstract import LightProfile
-from autogalaxy.profiles.light.decorators import (
-    check_operated_only,
-)
+from autogalaxy.profiles.light.decorators import check_operated_only
 
 
 class AbstractSersic(LightProfile):
@@ -62,9 +60,9 @@ class AbstractSersic(LightProfile):
             (2 * self.sersic_index)
             - (1.0 / 3.0)
             + (4.0 / (405.0 * self.sersic_index))
-            + (46.0 / (25515.0 * self.sersic_index**2))
-            + (131.0 / (1148175.0 * self.sersic_index**3))
-            - (2194697.0 / (30690717750.0 * self.sersic_index**4))
+            + (46.0 / (25515.0 * self.sersic_index ** 2))
+            + (131.0 / (1148175.0 * self.sersic_index ** 3))
+            - (2194697.0 / (30690717750.0 * self.sersic_index ** 4))
         )
 
     def image_2d_via_radii_from(self, radius: np.ndarray) -> np.ndarray:
@@ -127,7 +125,7 @@ class Sersic(AbstractSersic, LightProfile):
         grid_radii
             The radial distances from the centre of the profile, for each coordinate on the grid.
         """
-        np.seterr(all="ignore")
+        # np.seterr(all="ignore")
         return np.multiply(
             self._intensity,
             np.exp(

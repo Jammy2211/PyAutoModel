@@ -1,3 +1,5 @@
+import math
+
 import json
 import jax.numpy as np
 from typing import Dict, List, Optional, Tuple, Type
@@ -44,7 +46,7 @@ class Plane(OperateImageGalaxies, OperateDeflections, Dictable):
                     "No redshift and no galaxies were input to a Plane. A redshift for the Plane therefore cannot be"
                     "determined"
                 )
-            redshift = np.mean([galaxy.redshift for galaxy in galaxies])
+            redshift = sum(galaxy.redshift for galaxy in galaxies) / len(galaxies)
 
         self.redshift = redshift
         self.galaxies = galaxies

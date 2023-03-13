@@ -45,12 +45,7 @@ class Plane(OperateImageGalaxies, OperateDeflections, Dictable):
                     "No redshift and no galaxies were input to a Plane. A redshift for the Plane therefore cannot be"
                     "determined"
                 )
-            elif not all(
-                [galaxies[0].redshift == galaxy.redshift for galaxy in galaxies]
-            ):
-                redshift = np.mean([galaxy.redshift for galaxy in galaxies])
-            else:
-                redshift = galaxies[0].redshift
+            redshift = np.mean([galaxy.redshift for galaxy in galaxies])
 
         self.redshift = redshift
         self.galaxies = galaxies
@@ -278,8 +273,7 @@ class Plane(OperateImageGalaxies, OperateDeflections, Dictable):
                 )
 
                 hyper_noise_map = galaxy.hyper_galaxy.hyper_noise_map_from(
-                    contribution_map=contribution_map,
-                    noise_map=noise_map,
+                    contribution_map=contribution_map, noise_map=noise_map,
                 )
 
                 hyper_noise_map_list.append(hyper_noise_map)

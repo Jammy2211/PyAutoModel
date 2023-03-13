@@ -1,12 +1,11 @@
 import json
-import numpy as np
+import jax.numpy as np
 from typing import Dict, List, Optional, Tuple, Type
 
 import autoarray as aa
 
 from autoconf.dictable import Dictable
 
-from autogalaxy import exc
 from autogalaxy.galaxy.galaxy import Galaxy
 from autogalaxy.galaxy.hyper import HyperGalaxy
 from autogalaxy.profiles.light.basis import Basis

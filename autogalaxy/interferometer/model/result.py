@@ -46,11 +46,11 @@ class ResultInterferometer(ResultDataset):
         non-linear search.
         """
         hyper_background_noise = self.analysis.hyper_background_noise_via_instance_from(
-            instance=self.instance
+            instance=self.instance_copy
         )
 
         instance = self.analysis.instance_with_associated_hyper_images_from(
-            instance=self.instance
+            instance=self.instance_copy
         )
 
         plane = self.analysis.plane_via_instance_from(instance=instance)

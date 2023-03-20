@@ -131,10 +131,16 @@ class GetVisuals2D(aplt.GetVisuals2D):
                 mass_obj.extract_attribute(cls=MassProfile, attr_name="centre"),
             )
 
-        critical_curves = self.get(
-            "critical_curves",
-            mass_obj.critical_curves_from(grid=grid),
-            "critical_curves",
+        tangential_critical_curves = self.get(
+            "tangential_critical_curves",
+            mass_obj.tangential_critical_curve_list_from(grid=grid),
+            "tangential_critical_curves",
+        )
+
+        radial_critical_curves = self.get(
+            "radial_critical_curves",
+            mass_obj.radial_critical_curve_list_from(grid=grid),
+            "radial_critical_curves",
         )
 
         return (
@@ -142,7 +148,8 @@ class GetVisuals2D(aplt.GetVisuals2D):
             + visuals_via_mask
             + self.visuals.__class__(
                 mass_profile_centres=mass_profile_centres,
-                critical_curves=critical_curves,
+                tangential_critical_curves=tangential_critical_curves,
+                radial_critical_curves=radial_critical_curves,
             )
         )
 
@@ -240,25 +247,50 @@ class GetVisuals2D(aplt.GetVisuals2D):
 
         if galaxy_index == 0:
 
-            critical_curves = self.get(
-                "critical_curves",
-                plane.critical_curves_from(grid=grid),
-                "critical_curves",
+            tangential_critical_curves = self.get(
+                "tangential_critical_curves",
+                plane.tangential_critical_curve_list_from(grid=grid),
+                "tangential_critical_curves",
             )
         else:
-            critical_curves = None
+            tangential_critical_curves = None
+
+        if galaxy_index == 0:
+
+            radial_critical_curves = self.get(
+                "radial_critical_curves",
+                plane.radial_critical_curve_list_from(grid=grid),
+                "radial_critical_curves",
+            )
+        else:
+            radial_critical_curves = None
 
         if galaxy_index == 1:
-            caustics = self.get("caustics", plane.caustics_from(grid=grid), "caustics")
+            tangential_caustics = self.get(
+                "tangential_caustics",
+                plane.tangential_caustic_list_from(grid=grid),
+                "tangential_caustics",
+            )
         else:
-            caustics = None
+            tangential_caustics = None
+
+        if galaxy_index == 1:
+            radial_caustics = self.get(
+                "radial_caustics",
+                plane.radial_caustic_list_from(grid=grid),
+                "radial_caustics",
+            )
+        else:
+            radial_caustics = None
 
         return self.visuals + self.visuals.__class__(
             origin=origin,
             light_profile_centres=light_profile_centres,
             mass_profile_centres=mass_profile_centres,
-            critical_curves=critical_curves,
-            caustics=caustics,
+            tangential_critical_curves=tangential_critical_curves,
+            radial_critical_curves=radial_critical_curves,
+            tangential_caustics=tangential_caustics,
+            radial_caustics=radial_caustics,
         )
 
     def via_fit_imaging_from(self, fit: FitImaging) -> Visuals2D:

@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 from typing import Dict, List, Type, Union
 
@@ -47,6 +48,27 @@ class Result(af.Result):
 
         self.analysis = analysis
 
+        self.__instance = None
+
+    @property
+    def instance_copy(self) -> af.Instance:
+        """
+        This is neccessary because the attributes of the `instance` are altered in the fit function, when linear
+        light profiles are converted to standard light profile.
+
+        This impacts autofit prior passing.
+
+        Returns
+        -------
+        A deep copy of the instance of the max log likelihood result.
+        """
+
+        if self.__instance is None:
+
+            self.__instance = copy.deepcopy(self.instance)
+
+        return self.__instance
+
     @property
     def max_log_likelihood_plane(self) -> Plane:
         """
@@ -54,7 +76,7 @@ class Result(af.Result):
         """
 
         instance = self.analysis.instance_with_associated_hyper_images_from(
-            instance=self.instance
+            instance=self.instance_copy
         )
 
         return self.analysis.plane_via_instance_from(instance=instance)
@@ -64,7 +86,7 @@ class Result(af.Result):
         """
         Tuples associating the names of galaxies with instances from the best fit
         """
-        return self.instance.path_instance_tuples_for_class(cls=Galaxy)
+        return self.instance_copy.path_instance_tuples_for_class(cls=Galaxy)
 
 
 class ResultDataset(Result):

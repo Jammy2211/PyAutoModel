@@ -13,8 +13,10 @@ class Include2D(aplt.Include2D):
         positions=None,
         light_profile_centres=None,
         mass_profile_centres=None,
-        critical_curves=None,
-        caustics=None,
+        tangential_critical_curves=None,
+        radial_critical_curves=None,
+        tangential_caustics=None,
+        radial_caustics=None,
         multiple_images=None,
         mapper_source_plane_mesh_grid: Optional[bool] = None,
         mapper_source_plane_data_grid: Optional[bool] = None,
@@ -34,8 +36,10 @@ class Include2D(aplt.Include2D):
         self._positions = positions
         self._light_profile_centres = light_profile_centres
         self._mass_profile_centres = mass_profile_centres
-        self._critical_curves = critical_curves
-        self._caustics = caustics
+        self._tangential_critical_curves = tangential_critical_curves
+        self._radial_critical_curves = radial_critical_curves
+        self._tangential_caustics = tangential_caustics
+        self._radial_caustics = radial_caustics
         self._multiple_images = multiple_images
 
     @property
@@ -53,12 +57,24 @@ class Include2D(aplt.Include2D):
         return self.load(value=self._mass_profile_centres, name="mass_profile_centres")
 
     @property
-    def critical_curves(self):
-        return self.load(value=self._critical_curves, name="critical_curves")
+    def tangential_critical_curves(self):
+        return self.load(
+            value=self._tangential_critical_curves, name="tangential_critical_curves"
+        )
 
     @property
-    def caustics(self):
-        return self.load(value=self._caustics, name="caustics")
+    def radial_critical_curves(self):
+        return self.load(
+            value=self._radial_critical_curves, name="radial_critical_curves"
+        )
+
+    @property
+    def tangential_caustics(self):
+        return self.load(value=self._tangential_caustics, name="tangential_caustics")
+
+    @property
+    def radial_caustics(self):
+        return self.load(value=self._radial_caustics, name="radial_caustics")
 
     @property
     def multiple_images(self):

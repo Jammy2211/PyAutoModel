@@ -96,6 +96,8 @@ label_format:
     mass_at_truncation_radius: '{:.4e}'
     mass_to_light_gradient: '{:.4f}'
     mass_to_light_ratio: '{:.4f}'
+    n_x: '{:.1d}'
+    n_y: '{:.1d}'
     noise_factor: '{:.3f}'
     noise_power: '{:.3f}'
     noise_scale: '{:.3f}'

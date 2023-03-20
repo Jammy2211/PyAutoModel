@@ -376,8 +376,8 @@ Basis Functions
 A natural extension of linear light profiles are basis functions, which group many linear light profiles together in
 order to capture complex and irregular structures in a galaxy's emission.
 
-Using a clever model parameterization a basis can be composed which corresponds to just N = 5-10 parameters, making
-model-fitting efficient and robust.
+Using a clever model parameterization a basis can be composed which corresponds to just N = 3-6 non-linar parameters,
+making model-fitting efficient and robust.
 
 Below, we compose a basis of 10 Gaussians which all share the same `centre` and `ell_comps`. Their `sigma`
 values are set via the relation `y = a + (log10(i+1) + b)`, where `i` is the  Gaussian index and `a` and `b` are free
@@ -459,6 +459,12 @@ Below is a snippet of the model, showing that different Gaussians are in the mod
         ...
         trimmed for conciseness
         ...
+
+**PyAutoGalaxy** also supports Shapelet basis functions, which are appropriate for capturing exponential / disk-like
+features in a galaxy.
+
+This is illustrated in full on the ``autogalaxy_workspace`` in the example
+script autogalaxy_workspace/scripts/imaging/modeling/advanced/shapelets.py .
 
 **PyAutoGalaxy** can also apply Bayesian regularization to Basis functions, which smooths the linear light profiles
 (e.g. the Gaussians) in order to prevent over-fitting noise.

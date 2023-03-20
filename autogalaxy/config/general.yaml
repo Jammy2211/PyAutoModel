@@ -8,4 +8,5 @@ hyper:
   stochastic_outputs: false
 test:
   check_figure_of_merit_sanity: false
+  bypass_figure_of_merit_sanity: false
   check_preloads: false

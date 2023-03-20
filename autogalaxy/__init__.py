@@ -91,6 +91,7 @@ from .profiles.light import standard as lp
 from .profiles.light import basis as lp_basis
 from .profiles.light.linear import LightProfileLinearObjFuncList
 from .profiles.light import linear as lp_linear
+from .profiles.light import shapelets as lp_shapelets
 from .profiles.light import operated as lp_operated
 from .profiles.light import (
     linear_operated as lp_linear_operated,

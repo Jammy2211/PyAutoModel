@@ -122,104 +122,51 @@ def set_upper_limit_of_pixelization_pixels_prior(
         the number of pixels in the mask below which the lower limit is set.
     """
 
-    # if not hasattr(model, "galaxies"):
-    #     return
-    #
-    # mesh_list = model.galaxies.models_with_type(
-    #     cls=(
-    #         aa.mesh.DelaunayBrightnessImage, aa.mesh.VoronoiBrightnessImage, aa.mesh.VoronoiNNBrightnessImage))
-    #
-    # print(mesh_list)
-    #
-    # if not mesh_list:
-    #     return
-    #
-    # for mesh in mesh_list:
-    #
-    #     if pixels_in_mask < mesh.pixels.upper_limit:
-    #
-    #         lower_limit = mesh.pixels.lower_limit
-    #
-    #         log_str = (
-    #             "MODIFY BEFORE FIT -  A pixelization mesh's pixel UniformPrior upper limit"
-    #             "was greater than the number of pixels in the mask. It has been "
-    #             "reduced to the number of pixels in the mask.\,"
-    #         )
-    #
-    #         if lower_limit > pixels_in_mask:
-    #
-    #             lower_limit = (
-    #                 pixels_in_mask
-    #                 - lower_limit_no_pixels_below_mask
-    #             )
-    #
-    #             logger.info(
-    #                 log_str
-    #                 + "MODIFY BEFORE FIT - The pixelization's mesh's pixel UniformPrior lower_limit was "
-    #                 "also above the number of pixels in the mask, and has been reduced"
-    #                 "to the number of pixels in the mask minus 10."
-    #             )
-    #         else:
-    #             logger.info(log_str)
-    #
-    #         mesh.pixels = af.UniformPrior(
-    #             lower_limit=lower_limit,
-    #             upper_limit=pixels_in_mask,
-    #         )
-
     if not hasattr(model, "galaxies"):
         return
 
-    for galaxy in model.galaxies:
+    mesh_list = model.galaxies.models_with_type(
+        cls=(
+            aa.mesh.DelaunayBrightnessImage,
+            aa.mesh.VoronoiBrightnessImage,
+            aa.mesh.VoronoiNNBrightnessImage,
+        )
+    )
 
-        if hasattr(galaxy, "pixelization"):
+    if not mesh_list:
+        return
 
-            if hasattr(galaxy.pixelization, "mesh"):
+    for mesh in mesh_list:
 
-                mesh = galaxy.pixelization.mesh
+        if hasattr(mesh.pixels, "upper_limit"):
 
-                if hasattr(mesh, "cls"):
+            if pixels_in_mask < mesh.pixels.upper_limit:
 
-                    if (
-                        mesh.cls is aa.mesh.DelaunayBrightnessImage
-                        or aa.mesh.VoronoiBrightnessImage
-                        or aa.mesh.VoronoiNNBrightnessImage
-                    ):
+                lower_limit = mesh.pixels.lower_limit
 
-                        if hasattr(mesh, "pixels"):
+                log_str = (
+                    "MODIFY BEFORE FIT -  A pixelization mesh's pixel UniformPrior upper limit"
+                    "was greater than the number of pixels in the mask. It has been "
+                    "reduced to the number of pixels in the mask.\,"
+                )
 
-                            if hasattr(mesh.pixels, "upper_limit"):
+                if lower_limit > pixels_in_mask:
 
-                                if pixels_in_mask < mesh.pixels.upper_limit:
+                    lower_limit = pixels_in_mask - lower_limit_no_pixels_below_mask
 
-                                    lower_limit = mesh.pixels.lower_limit
+                    logger.info(
+                        log_str
+                        + "MODIFY BEFORE FIT - The pixelization's mesh's pixel UniformPrior lower_limit was "
+                        "also above the number of pixels in the mask, and has been reduced"
+                        "to the number of pixels in the mask minus 10."
+                    )
+                else:
+                    logger.info(log_str)
 
-                                    log_str = (
-                                        "MODIFY BEFORE FIT -  A pixelization mesh's pixel UniformPrior upper limit"
-                                        "was greater than the number of pixels in the mask. It has been "
-                                        "reduced to the number of pixels in the mask.\,"
-                                    )
-
-                                    if lower_limit > pixels_in_mask:
-
-                                        lower_limit = (
-                                            pixels_in_mask
-                                            - lower_limit_no_pixels_below_mask
-                                        )
-
-                                        logger.info(
-                                            log_str
-                                            + "MODIFY BEFORE FIT - The pixelization's mesh's pixel UniformPrior lower_limit was "
-                                            "also above the number of pixels in the mask, and has been reduced"
-                                            "to the number of pixels in the mask minus 10."
-                                        )
-                                    else:
-                                        logger.info(log_str)
-
-                                    mesh.pixels = af.UniformPrior(
-                                        lower_limit=lower_limit,
-                                        upper_limit=pixels_in_mask,
-                                    )
+                mesh.pixels = af.UniformPrior(
+                    lower_limit=lower_limit,
+                    upper_limit=pixels_in_mask,
+                )
 
 
 def clean_model_of_hyper_images(model):
@@ -341,7 +288,10 @@ def hyper_pix_model_from(
     if setup_hyper is None:
         return None
 
-    model = result.instance.as_model((aa.AbstractMesh, aa.AbstractRegularization))
+    model = result.instance.as_model(
+        model_classes=(aa.AbstractMesh, aa.AbstractRegularization),
+        excluded_classes=(aa.reg.ConstantZeroth, aa.reg.Zeroth),
+    )
 
     if not has_pixelization_from(model=model):
         return None
@@ -351,6 +301,12 @@ def hyper_pix_model_from(
 
     if regularization_overwrite:
         model.galaxies.source.regularization = af.Model(regularization_overwrite)
+
+    if setup_hyper.mesh_pixels_fixed is not None:
+        if hasattr(model.galaxies.source.pixelization.mesh, "pixels"):
+            model.galaxies.source.pixelization.mesh.pixels = (
+                setup_hyper.mesh_pixels_fixed
+            )
 
     model = clean_model_of_hyper_images(model=model)
 
@@ -384,10 +340,15 @@ def hyper_fit_no_noise(
     result: af.Result,
     analysis,
     search_previous,
+    use_positive_only_solver: bool = False,
     include_hyper_image_sky: bool = False,
 ):
 
     analysis.set_hyper_dataset(result=result)
+
+    if use_positive_only_solver:
+
+        analysis.settings_inversion.use_positive_only_solver = True
 
     hyper_model_pix = hyper_pix_model_from(
         setup_hyper=setup_hyper,
@@ -419,6 +380,7 @@ def hyper_fit(
     result: af.Result,
     analysis,
     search_previous: af.NonLinearSearch,
+    use_positive_only_solver: bool = False,
     include_hyper_image_sky: bool = False,
     pixelization_overwrite=None,
     regularization_overwrite=None,
@@ -447,6 +409,9 @@ def hyper_fit(
         The result of a previous `Analysis` search whose maximum log likelihood model forms the basis of the hyper model.
     analysis : Analysis
         An analysis class used to fit imaging or interferometer data with a model.
+    use_positive_only_solver
+        Use a positive-only solver for the linear algebra, which does not allow negative values in the lens light /
+        source reconstructions.
 
     Returns
     -------
@@ -472,8 +437,12 @@ def hyper_fit(
             result=result,
             analysis=analysis,
             search_previous=search_previous,
+            use_positive_only_solver=use_positive_only_solver,
             include_hyper_image_sky=include_hyper_image_sky,
         )
+
+    if use_positive_only_solver:
+        analysis.settings_inversion.use_positive_only_solver = True
 
     if hyper_noise_model is not None:
 
@@ -557,7 +526,10 @@ def hyper_model_from(
 
     from autogalaxy.galaxy.hyper import HyperGalaxy
 
-    model = result.instance.as_model((aa.AbstractMesh, aa.AbstractRegularization))
+    model = result.instance.as_model(
+        model_classes=(aa.AbstractMesh, aa.AbstractRegularization),
+        excluded_classes=(aa.reg.ConstantZeroth, aa.reg.Zeroth),
+    )
 
     model = clean_model_of_hyper_images(model=model)
 
@@ -651,7 +623,7 @@ def stochastic_model_from(
     if include_regularization:
         model_classes.append(aa.AbstractRegularization)
 
-    model = result.instance.as_model(model_classes)
+    model = result.instance.as_model(tuple(model_classes))
 
     if clean_model:
         model = clean_model_of_hyper_images(model=model)

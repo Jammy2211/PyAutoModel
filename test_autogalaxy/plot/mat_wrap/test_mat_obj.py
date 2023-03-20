@@ -1,26 +1,32 @@
-from os import path
 import autogalaxy.plot as aplt
 
 
-class TestMatObj:
-    def test__all_load_from_config_correctly(self):
+def test__mat_obj__all_load_from_config_correctly():
 
-        light_profile_centres_scatter = aplt.LightProfileCentresScatter()
+    light_profile_centres_scatter = aplt.LightProfileCentresScatter()
 
-        assert light_profile_centres_scatter.config_dict["s"] == 1
+    assert light_profile_centres_scatter.config_dict["s"] == 1
 
-        mass_profile_centres_scatter = aplt.MassProfileCentresScatter()
+    mass_profile_centres_scatter = aplt.MassProfileCentresScatter()
 
-        assert mass_profile_centres_scatter.config_dict["s"] == 2
+    assert mass_profile_centres_scatter.config_dict["s"] == 2
 
-        multiple_images_scatter = aplt.MultipleImagesScatter()
+    multiple_images_scatter = aplt.MultipleImagesScatter()
 
-        assert multiple_images_scatter.config_dict["s"] == 3
+    assert multiple_images_scatter.config_dict["s"] == 3
 
-        critical_curves_plot = aplt.CriticalCurvesPlot()
+    tangential_critical_curves_plot = aplt.TangentialCriticalCurvesPlot()
 
-        assert critical_curves_plot.config_dict["width"] == 4
+    assert tangential_critical_curves_plot.config_dict["width"] == 4
 
-        caustics_plot = aplt.CausticsPlot()
+    tangential_caustics_plot = aplt.TangentialCausticsPlot()
 
-        assert caustics_plot.config_dict["width"] == 5
+    assert tangential_caustics_plot.config_dict["width"] == 5
+
+    radial_critical_curves_plot = aplt.RadialCriticalCurvesPlot()
+
+    assert radial_critical_curves_plot.config_dict["width"] == 4
+
+    radial_caustics_plot = aplt.RadialCausticsPlot()
+
+    assert radial_caustics_plot.config_dict["width"] == 5

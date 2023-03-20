@@ -63,8 +63,10 @@ from autogalaxy.plot.wrap import (
     ModelFluxesYXScatter,
     LightProfileCentresScatter,
     MassProfileCentresScatter,
-    CriticalCurvesPlot,
-    CausticsPlot,
+    TangentialCriticalCurvesPlot,
+    RadialCriticalCurvesPlot,
+    TangentialCausticsPlot,
+    RadialCausticsPlot,
     MultipleImagesScatter,
 )
 

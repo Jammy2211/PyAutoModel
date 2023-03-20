@@ -5,6 +5,7 @@ radial_minimum:
     DevVaucouleurs: 1.0e-06
     DevVaucouleursSph: 1.0e-06
     ExponentialRadialGradient: 1.0e-06
+    ExponentialRadialGradientSph: 1.0e-06
     ElsonFreeFall: 1.0e-08
     ElsonFreeFallSph: 1.0e-08
     Exponential: 1.0e-06
@@ -48,6 +49,11 @@ radial_minimum:
     SersicCoreSph: 1.0e-06
     SersicRadialGradient: 1.0e-06
     SersicSph: 1.0e-06
-    SphexponentialRadialGradient: 1.0e-06
     SersicRadialGradientSph: 1.0e-06
+    ShapeletCartesian: 1.0e-8
+    ShapeletCartesianEll: 1.0e-8
+    ShapeletPolar: 1.0e-8
+    ShapeletPolarEll: 1.0e-8
+    ShapeletExponential: 1.0e-8
+    ShapeletExponentialEll: 1.0e-8
     EllProfile: 1.0e-08

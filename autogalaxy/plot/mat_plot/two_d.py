@@ -39,8 +39,12 @@ class MatPlot2D(aplt.MatPlot2D):
         light_profile_centres_scatter: Optional[w.LightProfileCentresScatter] = None,
         mass_profile_centres_scatter: Optional[w.MassProfileCentresScatter] = None,
         multiple_images_scatter: Optional[w.MultipleImagesScatter] = None,
-        critical_curves_plot: Optional[w.CriticalCurvesPlot] = None,
-        caustics_plot: Optional[w.CausticsPlot] = None,
+        tangential_critical_curves_plot: Optional[
+            w.TangentialCriticalCurvesPlot
+        ] = None,
+        radial_critical_curves_plot: Optional[w.RadialCriticalCurvesPlot] = None,
+        tangential_caustics_plot: Optional[w.TangentialCausticsPlot] = None,
+        radial_caustics_plot: Optional[w.RadialCausticsPlot] = None,
     ):
         """
         Visualizes data structures (e.g an `Array2D`, `Grid2D`, `VectorField`, etc.) using Matplotlib.
@@ -131,10 +135,14 @@ class MatPlot2D(aplt.MatPlot2D):
           Scatters the (y,x) centres of all `MassProfile`'s in the plotted object (e.g. a `Tracer`).
         light_profile_centres_scatter
           Scatters the (y,x) coordinates of the multiple image locations of the lens mass model.
-        critical_curves_plot
-            Plots the critical curves of the lens mass model as colored lines.
-        caustics_plot
-            Plots the caustics of the lens mass model as colored lines.
+        tangential_critical_curves_plot
+            Plots the tangential critical curves of the lens mass model as colored lines.
+        radial_critical_curves_plot
+            Plots the radial critical curves of the lens mass model as colored lines.
+        tangential_caustics_plot
+            Plots the tangential caustics of the lens mass model as colored lines.
+        radial_caustics_plot
+            Plots the radial caustics of the lens mass model as colored lines.
         """
 
         self.light_profile_centres_scatter = (
@@ -147,10 +155,17 @@ class MatPlot2D(aplt.MatPlot2D):
         self.multiple_images_scatter = (
             multiple_images_scatter or w.MultipleImagesScatter(is_default=True)
         )
-        self.critical_curves_plot = critical_curves_plot or w.CriticalCurvesPlot(
-            is_default=True
+        self.tangential_critical_curves_plot = (
+            tangential_critical_curves_plot
+            or w.TangentialCriticalCurvesPlot(is_default=True)
         )
-        self.caustics_plot = caustics_plot or w.CausticsPlot(is_default=True)
+        self.radial_critical_curves_plot = (
+            radial_critical_curves_plot or w.RadialCriticalCurvesPlot()
+        )
+        self.tangential_caustics_plot = (
+            tangential_caustics_plot or w.TangentialCausticsPlot(is_default=True)
+        )
+        self.radial_caustics_plot = radial_caustics_plot or w.RadialCausticsPlot()
 
         super().__init__(
             units=units,

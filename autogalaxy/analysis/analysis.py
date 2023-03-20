@@ -217,10 +217,7 @@ class AnalysisDataset(Analysis):
 
             if conf.instance["general"]["test"]["check_preloads"]:
 
-                try:
-                    self.preloads.check_via_fit(fit=fit_0)
-                except (aa.exc.InversionException, exc.InversionException):
-                    pass
+                self.preloads.check_via_fit(fit=fit_0)
 
         self.preloads.output_info_to_summary(file_path=paths.profile_path)
 
@@ -442,6 +439,9 @@ class AnalysisDataset(Analysis):
         """
 
         if os.environ.get("PYAUTOFIT_TEST_MODE") == "1":
+            return
+
+        if conf.instance["general"]["test"]["bypass_figure_of_merit_sanity"]:
             return
 
         figure_of_merit = result.max_log_likelihood_fit.figure_of_merit

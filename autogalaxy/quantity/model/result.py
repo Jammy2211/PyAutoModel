@@ -42,4 +42,4 @@ class ResultQuantity(Result):
         search.
         """
 
-        return self.analysis.fit_quantity_for_instance(instance=self.instance)
+        return self.analysis.fit_quantity_for_instance(instance=self.instance_copy)

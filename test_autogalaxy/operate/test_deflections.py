@@ -122,194 +122,6 @@ def test__magnification_2d_via_hessian_from():
     assert magnification.in_list[1] == pytest.approx(-2.57591, 1.0e-4)
 
 
-def test__critical_curves_from__tangential():
-
-    grid = ag.Grid2D.uniform(shape_native=(15, 15), pixel_scales=0.3)
-
-    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
-
-    critical_curves = sis.critical_curves_from(grid=grid)
-
-    tangential_critical_curve = np.asarray(critical_curves[0])
-
-    x_critical_tangential, y_critical_tangential = (
-        tangential_critical_curve[:, 1],
-        tangential_critical_curve[:, 0],
-    )
-
-    assert np.mean(
-        x_critical_tangential**2 + y_critical_tangential**2
-    ) == pytest.approx(sis.einstein_radius**2, 5e-1)
-
-    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
-
-    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
-
-    critical_curves = sis.critical_curves_from(grid=grid)
-
-    tangential_critical_curve = np.asarray(critical_curves[0])
-
-    y_centre = np.mean(tangential_critical_curve[:, 0])
-    x_centre = np.mean(tangential_critical_curve[:, 1])
-
-    assert -0.03 < y_centre < 0.03
-    assert -0.03 < x_centre < 0.03
-
-    sis = ag.mp.IsothermalSph(centre=(0.5, 1.0), einstein_radius=2.0)
-
-    critical_curves = sis.critical_curves_from(grid=grid)
-
-    tangential_critical_curve = np.asarray(critical_curves[0])
-    y_centre = np.mean(tangential_critical_curve[:, 0])
-    x_centre = np.mean(tangential_critical_curve[:, 1])
-
-    assert 0.47 < y_centre < 0.53
-    assert 0.97 < x_centre < 1.03
-
-
-def test__critical_curves_from__radial():
-
-    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
-
-    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
-
-    critical_curves = sis.critical_curves_from(grid=grid)
-
-    radial_critical_curve = np.asarray(critical_curves[0])
-
-    y_centre = np.mean(radial_critical_curve[:, 0])
-    x_centre = np.mean(radial_critical_curve[:, 1])
-
-    assert -0.05 < y_centre < 0.05
-    assert -0.05 < x_centre < 0.05
-
-    sis = ag.mp.IsothermalSph(centre=(0.5, 1.0), einstein_radius=2.0)
-
-    critical_curves = sis.critical_curves_from(grid=grid)
-
-    radial_critical_curve = np.asarray(critical_curves[0])
-
-    y_centre = np.mean(radial_critical_curve[:, 0])
-    x_centre = np.mean(radial_critical_curve[:, 1])
-
-    assert 0.45 < y_centre < 0.55
-    assert 0.95 < x_centre < 1.05
-
-    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
-
-    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
-
-    caustics = sis.caustics_from(grid=grid)
-
-    tangential_caustic = np.asarray(caustics[0])
-
-    y_centre = np.mean(tangential_caustic[:, 0])
-    x_centre = np.mean(tangential_caustic[:, 1])
-
-    assert -0.03 < y_centre < 0.03
-    assert -0.03 < x_centre < 0.03
-
-    sis = ag.mp.IsothermalSph(centre=(0.5, 1.0), einstein_radius=2.0)
-
-    caustics = sis.caustics_from(grid=grid)
-
-    tangential_caustic = np.asarray(caustics[0])
-
-    y_centre = np.mean(tangential_caustic[:, 0])
-    x_centre = np.mean(tangential_caustic[:, 1])
-
-    assert 0.47 < y_centre < 0.53
-    assert 0.97 < x_centre < 1.03
-
-
-def test__caustics_from__radial():
-
-    grid = ag.Grid2D.uniform(shape_native=(20, 20), pixel_scales=0.2)
-
-    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
-
-    caustics = sis.caustics_from(grid=grid)
-
-    caustic_radial = np.asarray(caustics[1])
-
-    x_caustic_radial, y_caustic_radial = (caustic_radial[:, 1], caustic_radial[:, 0])
-
-    assert np.mean(x_caustic_radial**2 + y_caustic_radial**2) == pytest.approx(
-        sis.einstein_radius**2, 5e-1
-    )
-
-    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
-
-    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
-
-    caustics = sis.caustics_from(grid=grid)
-
-    radial_caustic = np.asarray(caustics[1])
-
-    y_centre = np.mean(radial_caustic[:, 0])
-    x_centre = np.mean(radial_caustic[:, 1])
-
-    assert -0.2 < y_centre < 0.2
-    assert -0.35 < x_centre < 0.35
-
-    sis = ag.mp.IsothermalSph(centre=(0.5, 1.0), einstein_radius=2.0)
-
-    caustics = sis.caustics_from(grid=grid)
-
-    radial_caustic = np.asarray(caustics[1])
-
-    y_centre = np.mean(radial_caustic[:, 0])
-    x_centre = np.mean(radial_caustic[:, 1])
-
-    assert 0.3 < y_centre < 0.7
-    assert 0.7 < x_centre < 1.2
-
-
-def test__area_within_tangential_critical_curve_from():
-
-    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
-
-    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
-
-    area_calc = np.pi * sis.einstein_radius**2
-
-    area_within_tangential_critical_curve = (
-        sis.area_within_tangential_critical_curve_from(grid=grid)
-    )
-
-    assert area_within_tangential_critical_curve == pytest.approx(area_calc, 1e-1)
-
-
-def test__einstein_radius_from():
-
-    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
-
-    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
-
-    einstein_radius = sis.einstein_radius_from(grid=grid)
-
-    assert einstein_radius == pytest.approx(2.0, 1e-1)
-
-    sie = ag.mp.Isothermal(
-        centre=(0.0, 0.0), einstein_radius=2.0, ell_comps=(0.0, -0.25)
-    )
-
-    einstein_radius = sie.einstein_radius_from(grid=grid)
-
-    assert einstein_radius == pytest.approx(1.9360, 1e-1)
-
-
-def test__einstein_mass_from():
-
-    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
-
-    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
-
-    einstein_mass = sis.einstein_mass_angular_from(grid=grid)
-
-    assert einstein_mass == pytest.approx(np.pi * 2.0**2.0, 1e-1)
-
-
 def test__magnification_2d_from__compare_eigen_values_and_determinant():
 
     grid = ag.Grid2D.uniform(shape_native=(100, 100), pixel_scales=0.05, sub_size=1)
@@ -394,7 +206,47 @@ def test__magnification_2d_from__compare_determinant_and_convergence_and_shear()
     assert mean_error < 1e-4
 
 
-def test__tangential_critical_curve_from__compare_via_magnification():
+def test__tangential_critical_curve_list_from():
+
+    grid = ag.Grid2D.uniform(shape_native=(15, 15), pixel_scales=0.3)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    tangential_critical_curve_list = sis.tangential_critical_curve_list_from(grid=grid)
+
+    x_critical_tangential, y_critical_tangential = (
+        tangential_critical_curve_list[0][:, 1],
+        tangential_critical_curve_list[0][:, 0],
+    )
+
+    assert np.mean(
+        x_critical_tangential**2 + y_critical_tangential**2
+    ) == pytest.approx(sis.einstein_radius**2, 5e-1)
+
+    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    tangential_critical_curve_list = sis.tangential_critical_curve_list_from(grid=grid)
+
+    y_centre = np.mean(tangential_critical_curve_list[0][:, 0])
+    x_centre = np.mean(tangential_critical_curve_list[0][:, 1])
+
+    assert -0.03 < y_centre < 0.03
+    assert -0.03 < x_centre < 0.03
+
+    sis = ag.mp.IsothermalSph(centre=(0.5, 1.0), einstein_radius=2.0)
+
+    tangential_critical_curve_list = sis.tangential_critical_curve_list_from(grid=grid)
+
+    y_centre = np.mean(tangential_critical_curve_list[0][:, 0])
+    x_centre = np.mean(tangential_critical_curve_list[0][:, 1])
+
+    assert 0.47 < y_centre < 0.53
+    assert 0.97 < x_centre < 1.03
+
+
+def test__tangential_critical_curve_list_from__compare_via_magnification():
 
     grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
 
@@ -406,11 +258,11 @@ def test__tangential_critical_curve_from__compare_via_magnification():
         mass_profile=sie, grid=grid
     )[0]
 
-    tangential_critical_curve = sie.tangential_critical_curve_from(
+    tangential_critical_curve_list = sie.tangential_critical_curve_list_from(
         grid=grid, pixel_scale=0.2
     )
 
-    assert tangential_critical_curve == pytest.approx(
+    assert tangential_critical_curve_list[0] == pytest.approx(
         tangential_critical_curve_via_magnification, 5e-1
     )
 
@@ -418,16 +270,41 @@ def test__tangential_critical_curve_from__compare_via_magnification():
         mass_profile=sie, grid=grid
     )[0]
 
-    tangential_critical_curve = sie.tangential_critical_curve_from(
+    tangential_critical_curve_list = sie.tangential_critical_curve_list_from(
         grid=grid, pixel_scale=0.2
     )
 
-    assert tangential_critical_curve == pytest.approx(
+    assert tangential_critical_curve_list[0] == pytest.approx(
         tangential_critical_curve_via_magnification, 5e-1
     )
 
 
-def test__radial_critical_curve_from__compare_via_magnification():
+def test__radial_critical_curve_list_from():
+
+    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    radial_critical_curve_list = sis.radial_critical_curve_list_from(grid=grid)
+
+    y_centre = np.mean(radial_critical_curve_list[0][:, 0])
+    x_centre = np.mean(radial_critical_curve_list[0][:, 1])
+
+    assert -0.05 < y_centre < 0.05
+    assert -0.05 < x_centre < 0.05
+
+    sis = ag.mp.IsothermalSph(centre=(0.5, 1.0), einstein_radius=2.0)
+
+    radial_critical_curve_list = sis.radial_critical_curve_list_from(grid=grid)
+
+    y_centre = np.mean(radial_critical_curve_list[0][:, 0])
+    x_centre = np.mean(radial_critical_curve_list[0][:, 1])
+
+    assert 0.45 < y_centre < 0.55
+    assert 0.95 < x_centre < 1.05
+
+
+def test__radial_critical_curve_list_from__compare_via_magnification():
 
     grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
 
@@ -439,14 +316,39 @@ def test__radial_critical_curve_from__compare_via_magnification():
         mass_profile=sie, grid=grid
     )[1]
 
-    radial_critical_curve = sie.radial_critical_curve_from(grid=grid)
+    radial_critical_curve_list = sie.radial_critical_curve_list_from(grid=grid)
 
     assert sum(critical_curve_radial_via_magnification) == pytest.approx(
-        sum(radial_critical_curve), abs=0.7
+        sum(radial_critical_curve_list[0]), abs=0.7
     )
 
 
-def test__tangential_caustic_from___compare_via_magnification():
+def test__tangential_caustic_list_from():
+
+    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    tangential_caustic_list = sis.tangential_caustic_list_from(grid=grid)
+
+    y_centre = np.mean(tangential_caustic_list[0][:, 0])
+    x_centre = np.mean(tangential_caustic_list[0][:, 1])
+
+    assert -0.03 < y_centre < 0.03
+    assert -0.03 < x_centre < 0.03
+
+    sis = ag.mp.IsothermalSph(centre=(0.5, 1.0), einstein_radius=2.0)
+
+    tangential_caustic_list = sis.tangential_caustic_list_from(grid=grid)
+
+    y_centre = np.mean(tangential_caustic_list[0][:, 0])
+    x_centre = np.mean(tangential_caustic_list[0][:, 1])
+
+    assert 0.47 < y_centre < 0.53
+    assert 0.97 < x_centre < 1.03
+
+
+def test__tangential_caustic_list_from___compare_via_magnification():
 
     grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
 
@@ -458,14 +360,56 @@ def test__tangential_caustic_from___compare_via_magnification():
         mass_profile=sie, grid=grid
     )[0]
 
-    tangential_caustic = sie.tangential_caustic_from(grid=grid, pixel_scale=0.2)
+    tangential_caustic_list = sie.tangential_caustic_list_from(
+        grid=grid, pixel_scale=0.2
+    )
 
-    assert sum(tangential_caustic) == pytest.approx(
+    assert sum(tangential_caustic_list[0]) == pytest.approx(
         sum(tangential_caustic_via_magnification), 5e-1
     )
 
 
-def test__radial_caustic_from___compare_via_magnification():
+def test__radial_caustic_list_from():
+
+    grid = ag.Grid2D.uniform(shape_native=(20, 20), pixel_scales=0.2)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    radial_caustic_list = sis.radial_caustic_list_from(grid=grid)
+
+    x_caustic_radial, y_caustic_radial = (
+        radial_caustic_list[0][:, 1],
+        radial_caustic_list[0][:, 0],
+    )
+
+    assert np.mean(x_caustic_radial**2 + y_caustic_radial**2) == pytest.approx(
+        sis.einstein_radius**2, 5e-1
+    )
+
+    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    radial_caustic_list = sis.radial_caustic_list_from(grid=grid)
+
+    y_centre = np.mean(radial_caustic_list[0][:, 0])
+    x_centre = np.mean(radial_caustic_list[0][:, 1])
+
+    assert -0.2 < y_centre < 0.2
+    assert -0.35 < x_centre < 0.35
+
+    sis = ag.mp.IsothermalSph(centre=(0.5, 1.0), einstein_radius=2.0)
+
+    radial_caustic_list = sis.radial_caustic_list_from(grid=grid)
+
+    y_centre = np.mean(radial_caustic_list[0][:, 0])
+    x_centre = np.mean(radial_caustic_list[0][:, 1])
+
+    assert 0.3 < y_centre < 0.7
+    assert 0.7 < x_centre < 1.2
+
+
+def test__radial_caustic_list_from___compare_via_magnification():
 
     grid = ag.Grid2D.uniform(shape_native=(60, 60), pixel_scales=0.08)
 
@@ -477,11 +421,88 @@ def test__radial_caustic_from___compare_via_magnification():
         mass_profile=sie, grid=grid
     )[1]
 
-    radial_caustic = sie.radial_caustic_from(grid=grid, pixel_scale=0.08)
+    radial_caustic_list = sie.radial_caustic_list_from(grid=grid, pixel_scale=0.08)
 
-    assert sum(radial_caustic) == pytest.approx(
+    assert sum(radial_caustic_list[0]) == pytest.approx(
         sum(caustic_radial_via_magnification), 7e-1
     )
+
+
+def test__area_within_tangential_critical_curve_list_from():
+
+    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    area_calc = np.pi * sis.einstein_radius**2
+
+    area_within_tangential_critical_curve_list = (
+        sis.area_within_tangential_critical_curve_list_from(grid=grid)
+    )
+
+    assert area_within_tangential_critical_curve_list[0] == pytest.approx(
+        area_calc, 1e-1
+    )
+
+
+def test__einstein_radius_list_from():
+
+    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    einstein_radius_list = sis.einstein_radius_list_from(grid=grid)
+
+    assert einstein_radius_list[0] == pytest.approx(2.0, 1e-1)
+
+    sie = ag.mp.Isothermal(
+        centre=(0.0, 0.0), einstein_radius=2.0, ell_comps=(0.0, -0.25)
+    )
+
+    einstein_radius_list = sie.einstein_radius_list_from(grid=grid)
+
+    assert einstein_radius_list[0] == pytest.approx(1.9360, 1e-1)
+
+
+def test__einstein_radius_from():
+
+    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    einstein_radius = sis.einstein_radius_from(grid=grid)
+
+    assert einstein_radius == pytest.approx(2.0, 1e-1)
+
+    sie = ag.mp.Isothermal(
+        centre=(0.0, 0.0), einstein_radius=2.0, ell_comps=(0.0, -0.25)
+    )
+
+    einstein_radius = sie.einstein_radius_from(grid=grid)
+
+    assert einstein_radius == pytest.approx(1.9360, 1e-1)
+
+
+def test__einstein_mass_angular_list_from():
+
+    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    einstein_mass_angular_list = sis.einstein_mass_angular_list_from(grid=grid)
+
+    assert einstein_mass_angular_list[0] == pytest.approx(np.pi * 2.0**2.0, 1e-1)
+
+
+def test__einstein_mass_angular_from():
+
+    grid = ag.Grid2D.uniform(shape_native=(50, 50), pixel_scales=0.2)
+
+    sis = ag.mp.IsothermalSph(centre=(0.0, 0.0), einstein_radius=2.0)
+
+    einstein_mass_angular = sis.einstein_mass_angular_from(grid=grid)
+
+    assert einstein_mass_angular == pytest.approx(np.pi * 2.0**2.0, 1e-1)
 
 
 def test__jacobian_from():

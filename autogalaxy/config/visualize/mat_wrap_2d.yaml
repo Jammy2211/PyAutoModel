@@ -1,21 +1,39 @@
-CausticsPlot:
+TangentialCriticalCurvesPlot:
   figure:
-    c: k,r,g,b,m,y
+    c: k
     linestyle: '-'
     linewidth: 2
   subplot:
-    c: k,r,g,b,m,y
+    c: k
     linestyle: '-'
     linewidth: 2
-CriticalCurvesPlot:
+TangentialCausticsPlot:
   figure:
-    c: k,r,g,b,m,y
+    c: k
     linestyle: '-'
     linewidth: 2
   subplot:
-    c: k,r,g,b,m,y
+    c: k
     linestyle: '-'
     linewidth: 2
+RadialCriticalCurvesPlot:
+  figure:
+    c: w
+    linestyle: '-'
+    linewidth: 2
+  subplot:
+    c: w
+    linestyle: '-'
+    linewidth: 2
+RadialCausticsPlot:
+  figure:
+    c: w
+    linestyle: '-'
+    linewidth: 2
+  subplot:
+    c: w
+    linestyle: '-'
+    linewidth: 2    
 LightProfileCentresScatter:
   figure:
     c: k,r,g,b,m,y

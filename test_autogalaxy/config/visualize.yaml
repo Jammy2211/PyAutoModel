@@ -11,8 +11,10 @@ include:
     half_light_radius: true
   include_2d:
     border: true
-    caustics: false
-    critical_curves: false
+    tangential_caustics: false
+    radial_caustics: false
+    tangential_critical_curves: false
+    radial_critical_curves: false
     grid: false
     light_profile_centres: true
     mapper_image_plane_mesh_grid: true
@@ -289,8 +291,8 @@ mat_wrap_2d:
     subplot:
       alpha: 0.5
       edgecolor: r
-      linewidth: 1.0
-  CausticsPlot:
+      linewidth: 1.0      
+  TangentialCausticsPlot:
     figure:
       c: w,g
       pointsize: 21
@@ -301,7 +303,7 @@ mat_wrap_2d:
       pointsize: 23
       style: --
       width: 7
-  CriticalCurvesPlot:
+  TangentialCriticalCurvesPlot:
     figure:
       c: w,k
       pointsize: 20
@@ -312,6 +314,28 @@ mat_wrap_2d:
       pointsize: 22
       style: '-'
       width: 6
+  RadialCausticsPlot:
+    figure:
+      c: w,g
+      pointsize: 21
+      style: --
+      width: 5
+    subplot:
+      c: g
+      pointsize: 23
+      style: --
+      width: 7
+  RadialCriticalCurvesPlot:
+    figure:
+      c: w,k
+      pointsize: 20
+      style: '-'
+      width: 4
+    subplot:
+      c: b
+      pointsize: 22
+      style: '-'
+      width: 6      
   LightProfileCentresScatter:
     figure:
       c: k,r

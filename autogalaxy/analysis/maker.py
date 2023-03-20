@@ -93,6 +93,8 @@ class FitMaker:
             unit_vector=[unit_value] * self.model.prior_count, ignore_prior_limits=True
         )
 
+        # The use_w_tilde here is for speed, incase noise scalin is on.
+
         fit = self.fit_func(
             instance=instance, preload_overwrite=self.preloads_cls(use_w_tilde=False)
         )
@@ -117,6 +119,8 @@ class FitMaker:
             try:
 
                 instance = self.model.random_instance(ignore_prior_limits=True)
+
+                # The use_w_tilde here is for speed, incase noise scalin is on.
 
                 fit = self.fit_func(
                     instance=instance,

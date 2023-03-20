@@ -1,5 +1,5 @@
 from .abstract import LightProfile, LightProfileLinear, LightProfileLinearObjFuncList
-from .gaussian import Gaussian
+from .gaussian import Gaussian, GaussianSph
 from .moffat import Moffat
 from .sersic import (
     Sersic,

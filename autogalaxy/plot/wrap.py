@@ -25,9 +25,17 @@ class MultipleImagesScatter(aplt.GridScatter):
     pass
 
 
-class CriticalCurvesPlot(aplt.GridPlot):
+class TangentialCriticalCurvesPlot(aplt.GridPlot):
     pass
 
 
-class CausticsPlot(aplt.GridPlot):
+class RadialCriticalCurvesPlot(aplt.GridPlot):
+    pass
+
+
+class TangentialCausticsPlot(aplt.GridPlot):
+    pass
+
+
+class RadialCausticsPlot(aplt.GridPlot):
     pass

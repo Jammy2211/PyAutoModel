@@ -1,3 +1,4 @@
+import logging
 from typing import List, Union
 
 import autoarray as aa
@@ -9,7 +10,10 @@ from autogalaxy.plot.visuals.one_d import Visuals1D
 from autogalaxy.profiles.light.abstract import LightProfile
 from autogalaxy.profiles.mass.abstract.abstract import MassProfile
 
+from autogalaxy import exc
 from autogalaxy.util import error_util
+
+logger = logging.getLogger(__name__)
 
 
 class GetVisuals1D(aplt.GetVisuals1D):
@@ -161,13 +165,13 @@ class GetVisuals1D(aplt.GetVisuals1D):
             The collection of attributes that can be plotted by a `Plotter` object.
         """
 
+        einstein_radius = None
+
         if self.include.einstein_radius:
             try:
                 einstein_radius = mass_obj.einstein_radius_from(grid=grid)
             except (TypeError, AttributeError):
-                einstein_radius = None
-        else:
-            einstein_radius = None
+                pass
 
         einstein_radius = self.get("einstein_radius", value=einstein_radius)
 

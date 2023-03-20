@@ -141,6 +141,8 @@ def test__fit_figure_of_merit(masked_imaging_7x7, masked_imaging_covariance_7x7)
 
     plane = ag.Plane(redshift=0.5, galaxies=[g0, g1])
 
+    print(plane.cls_list_from(cls=ag.LightProfile))
+
     fit = ag.FitImaging(dataset=masked_imaging_7x7, plane=plane)
 
     assert fit.perform_inversion is False

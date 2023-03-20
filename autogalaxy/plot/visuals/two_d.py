@@ -20,10 +20,18 @@ class Visuals2D(aplt.Visuals2D):
         light_profile_centres: aa.Grid2DIrregular = None,
         mass_profile_centres: aa.Grid2DIrregular = None,
         multiple_images: aa.Grid2DIrregular = None,
-        critical_curves: Optional[
+        tangential_critical_curves: Optional[
             Union[aa.Grid2DIrregular, List[aa.Grid2DIrregular]]
         ] = None,
-        caustics: Optional[Union[aa.Grid2DIrregular, List[aa.Grid2DIrregular]]] = None,
+        radial_critical_curves: Optional[
+            Union[aa.Grid2DIrregular, List[aa.Grid2DIrregular]]
+        ] = None,
+        tangential_caustics: Optional[
+            Union[aa.Grid2DIrregular, List[aa.Grid2DIrregular]]
+        ] = None,
+        radial_caustics: Optional[
+            Union[aa.Grid2DIrregular, List[aa.Grid2DIrregular]]
+        ] = None,
         parallel_overscan=None,
         serial_prescan=None,
         serial_overscan=None,
@@ -51,8 +59,10 @@ class Visuals2D(aplt.Visuals2D):
         self.light_profile_centres = light_profile_centres
         self.mass_profile_centres = mass_profile_centres
         self.multiple_images = multiple_images
-        self.critical_curves = critical_curves
-        self.caustics = caustics
+        self.tangential_critical_curves = tangential_critical_curves
+        self.radial_critical_curves = radial_critical_curves
+        self.tangential_caustics = tangential_caustics
+        self.radial_caustics = radial_caustics
 
     def plot_via_plotter(self, plotter, grid_indexes=None, mapper=None):
 
@@ -73,14 +83,28 @@ class Visuals2D(aplt.Visuals2D):
         if self.multiple_images is not None:
             plotter.multiple_images_scatter.scatter_grid(grid=self.multiple_images)
 
-        if self.critical_curves is not None:
+        if self.tangential_critical_curves is not None:
             try:
-                plotter.critical_curves_plot.plot_grid(grid=self.critical_curves)
+                plotter.tangential_critical_curves_plot.plot_grid(
+                    grid=self.tangential_critical_curves
+                )
             except TypeError:
                 pass
 
-        if self.caustics is not None:
+        if self.radial_critical_curves is not None:
             try:
-                plotter.caustics_plot.plot_grid(grid=self.caustics)
+                plotter.radial_critical_curves_plot.plot_grid(grid=self.radial_critical_curves)
+            except TypeError:
+                pass
+
+        if self.tangential_caustics is not None:
+            try:
+                plotter.tangential_caustics_plot.plot_grid(grid=self.tangential_caustics)
+            except TypeError:
+                pass
+
+        if self.radial_caustics is not None:
+            try:
+                plotter.radial_caustics_plot.plot_grid(grid=self.radial_caustics)
             except TypeError:
                 pass

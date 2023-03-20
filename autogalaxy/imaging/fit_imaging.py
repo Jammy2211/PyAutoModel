@@ -13,6 +13,7 @@ from autogalaxy.hyper.hyper_data import HyperImageSky
 from autogalaxy.hyper.hyper_data import HyperBackgroundNoise
 from autogalaxy.plane.plane import Plane
 from autogalaxy.plane.to_inversion import PlaneToInversion
+from autogalaxy.profiles.light.abstract import LightProfile
 from autogalaxy.profiles.light.linear import LightProfileLinear
 
 
@@ -141,7 +142,17 @@ class FitImaging(aa.FitImaging, AbstractFitInversion):
         """
         Returns the image of the light profiles of all galaxies in the fit's plane, convolved with the
         imaging dataset's PSF.
+
+        If the plane does not have any light profiles, the image is computed bypassing the convolution routine
+        altogether.
         """
+
+        if not self.plane.has(cls=LightProfile):
+
+            return self.plane.image_2d_from(
+                grid=self.dataset.grid,
+            )
+
         return self.plane.blurred_image_2d_from(
             grid=self.dataset.grid,
             convolver=self.dataset.convolver,

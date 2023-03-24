@@ -16,9 +16,9 @@ def make_instance():
 @pytest.fixture(name="analysis")
 def make_analysis():
     imaging = ag.Imaging(
-        image=aa.Array2D.full(0.0, shape_native=(100, 100), pixel_scales=0.05),
-        noise_map=aa.Array2D.full(1.0, shape_native=(100, 100), pixel_scales=0.05),
-        psf=aa.Kernel2D.ones(shape_native=(11, 11), pixel_scales=0.05, normalize=True),
+        image=aa.Array2D.full(0.0, shape_native=(10, 10), pixel_scales=0.05),
+        noise_map=aa.Array2D.full(1.0, shape_native=(10, 10), pixel_scales=0.05),
+        psf=aa.Kernel2D.ones(shape_native=(3, 3), pixel_scales=0.05, normalize=True),
     )
 
     mask_2d = ag.Mask2D.circular(

@@ -681,8 +681,11 @@ class OperateDeflections(Dictable):
         )
 
         if len(einstein_mass_angular_list) > 1:
-            raise exc.ProfileException(
-                "The Einstein radius cannot be computed as there are multiple tangential critical curves."
+            logger.info(
+                """
+                There are multiple tangential critical curves, and the computed Einstein mass is the sum of 
+                all of them. Check the `einstein_mass_list_from` function for the individual Einstein. 
+            """
             )
 
         return einstein_mass_angular_list[0]

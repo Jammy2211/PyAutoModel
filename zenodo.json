@@ -2,7 +2,7 @@
     "description": "Release which is tied to the publication of PyAutoGalaxy in the Journal of Open Source software (JOSS).",
     "license": "other-open",
     "title": "PyAutoGalaxy: Open-Source Multiwavelength Galaxy Structure & Morphology",
-    "version": "2023.1.15.1",
+    "version": "2023.3.21.5",
     "upload_type": "software",
     "publication_date": "2023-01-19",
     "creators": [
@@ -63,7 +63,7 @@
     "related_identifiers": [
         {
             "scheme": "url",
-            "identifier": "https://github.com/Jammy2211/PyAutoGalaxy/tree/2023.1.15.1",
+            "identifier": "https://github.com/Jammy2211/PyAutoGalaxy/tree/2023.3.21.5",
             "relation": "isSupplementTo"
         },
         {

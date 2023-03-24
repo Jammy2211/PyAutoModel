@@ -51,6 +51,8 @@ label:
     truncation_radius: R_{\rm t}
     weight_floor: W_{\rm f}
     weight_power: W_{\rm p}
+    zeroth_coefficient: \lambda_{\rm 0}
+    zeroth_signal_scale: V
   superscript:
     ExternalShear: ext
     Mesh: mesh

@@ -15,6 +15,7 @@ from autogalaxy.plane.plane import Plane
 from autogalaxy.plane.to_inversion import PlaneToInversion
 from autogalaxy.profiles.light.abstract import LightProfile
 from autogalaxy.profiles.light.linear import LightProfileLinear
+from autogalaxy.profiles.light.operated import LightProfileOperated
 
 
 class FitImaging(aa.FitImaging, AbstractFitInversion):
@@ -84,8 +85,7 @@ class FitImaging(aa.FitImaging, AbstractFitInversion):
         self.preloads = preloads
 
         super().__init__(
-            dataset=dataset,
-            profiling_dict=profiling_dict,
+            dataset=dataset, profiling_dict=profiling_dict,
         )
         AbstractFitInversion.__init__(
             self=self, model_obj=plane, settings_inversion=settings_inversion
@@ -147,11 +147,11 @@ class FitImaging(aa.FitImaging, AbstractFitInversion):
         altogether.
         """
 
-        if not self.plane.has(cls=LightProfile):
+        if len(self.plane.cls_list_from(cls=LightProfile)) == len(
+            self.plane.cls_list_from(cls=LightProfileOperated)
+        ):
 
-            return self.plane.image_2d_from(
-                grid=self.dataset.grid,
-            )
+            return self.plane.image_2d_from(grid=self.dataset.grid,)
 
         return self.plane.blurred_image_2d_from(
             grid=self.dataset.grid,

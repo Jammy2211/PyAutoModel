@@ -1,4 +1,5 @@
 import numpy as np
+from autofit.jax_wrapper import numpy as jpn
 from typing import Tuple
 
 
@@ -31,9 +32,9 @@ def axis_ratio_and_angle_from(ell_comps):
     ell_comps : (float, float)
         The first and second ellipticity components of the elliptical coordinate system.
     """
-    angle = np.arctan2(ell_comps[0], ell_comps[1]) / 2
+    angle = jnp.arctan2(ell_comps[0], ell_comps[1]) / 2
     angle *= 180.0 / np.pi
-    fac = np.sqrt(ell_comps[1] ** 2 + ell_comps[0] ** 2)
+    fac = jnp.sqrt(ell_comps[1] ** 2 + ell_comps[0] ** 2)
     if fac > 0.999:
         fac = 0.999  # avoid unphysical solution
     # if fac > 1: print('unphysical e1,e2')

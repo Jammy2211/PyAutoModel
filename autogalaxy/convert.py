@@ -1,5 +1,5 @@
 import numpy as np
-from autofit.jax_wrapper import numpy as jpn
+from autofit.jax_wrapper import numpy as jnp
 from typing import Tuple
 
 

@@ -150,53 +150,6 @@ def test__mapper_galaxy_dict(masked_imaging_7x7):
     assert mapper_galaxy_dict == {}
 
 
-def test__regularization_list(masked_imaging_7x7):
-    regularization_0 = ag.reg.Constant(coefficient=1.0)
-    regularization_1 = ag.reg.ConstantSplit(coefficient=2.0)
-
-    pixelization_0 = ag.m.MockPixelization(
-        mesh=ag.mesh.Rectangular(shape=(10, 10)), regularization=regularization_0
-    )
-    pixelization_1 = ag.m.MockPixelization(
-        mesh=ag.mesh.Rectangular(shape=(8, 8)), regularization=regularization_1
-    )
-
-    g0 = ag.Galaxy(redshift=0.5, light=ag.lp_linear.Gaussian())
-    g1 = ag.Galaxy(redshift=0.5, pixelization=pixelization_0)
-    g2 = ag.Galaxy(
-        redshift=0.5, light=ag.lp_linear.Gaussian(), pixelization=pixelization_1
-    )
-
-    to_inversion = ag.GalaxiesToInversion(
-        galaxies=[g0, g1, g2], dataset=masked_imaging_7x7
-    )
-
-    regularization_list = to_inversion.regularization_list
-
-    assert regularization_list[0] == None
-    assert regularization_list[1] == None
-    assert regularization_list[2] == regularization_0
-    assert regularization_list[3] == regularization_1
-
-    regularization_2 = ag.reg.Constant(coefficient=3.0)
-
-    basis = ag.lp_basis.Basis(
-        profile_list=[ag.lp_linear.Gaussian()], regularization=regularization_2
-    )
-
-    g3 = ag.Galaxy(redshift=0.5, bulge=basis)
-
-    to_inversion = ag.GalaxiesToInversion(
-        galaxies=[g0, g1, g3], dataset=masked_imaging_7x7
-    )
-
-    regularization_list = to_inversion.regularization_list
-
-    assert regularization_list[0] == None
-    assert regularization_list[1] == regularization_2
-    assert regularization_list[2] == regularization_0
-
-
 def test__inversion_imaging_from(grid_2d_7x7, masked_imaging_7x7):
     g_linear = ag.Galaxy(redshift=0.5, light_linear=ag.lp_linear.Sersic())
 

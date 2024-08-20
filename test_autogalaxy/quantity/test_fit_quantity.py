@@ -65,8 +65,7 @@ def test__y_x(dataset_quantity_7x7_vector_yx_2d):
     )
 
     assert (
-        fit_quantity.y.dataset.data
-        == dataset_quantity_7x7_vector_yx_2d.y.data
+        fit_quantity.y.dataset.data == dataset_quantity_7x7_vector_yx_2d.y.data
     ).all()
     assert (
         fit_quantity.x.dataset.data == dataset_quantity_7x7_vector_yx_2d.x.data

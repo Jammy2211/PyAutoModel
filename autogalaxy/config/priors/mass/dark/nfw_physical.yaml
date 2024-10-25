@@ -1,0 +1,33 @@
+NFWPhysical:
+  centre_0:
+    type: Gaussian
+    mean: 0.0
+    sigma: 0.1
+    lower_limit: -inf
+    upper_limit: inf
+  centre_1:
+    type: Gaussian
+    mean: 0.0
+    sigma: 0.1
+    lower_limit: -inf
+    upper_limit: inf
+  ell_comps_0:
+    type: Gaussian
+    mean: 0.0
+    sigma: 0.3
+    lower_limit: -1.0
+    upper_limit: 1.0
+  ell_comps_1:
+    type: Gaussian
+    mean: 0.0
+    sigma: 0.3
+    lower_limit: -1.0
+    upper_limit: 1.0
+  log10M:
+    type: Uniform
+    lower_limit: 6
+    upper_limit: 16
+  concentration:
+    type: Uniform
+    lower_limit: 1
+    upper_limit: 30

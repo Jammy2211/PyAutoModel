@@ -1,6 +1,11 @@
+import os
+
 from typing import Optional, Tuple, Type
 
-import numpy as np
+if os.environ.get("USE_JAX", "0") == "1":
+    import jax.numpy as np
+else:
+    import numpy as np
 
 import autoarray as aa
 
@@ -86,7 +91,7 @@ class SphProfile(GeometryProfile):
     def radial_grid_from(self, grid: aa.type.Grid2DLike, **kwargs) -> np.ndarray:
         """
         Convert a grid of (y, x) coordinates, to their radial distances from the profile
-        centre (e.g. :math: r = x**2 + y**2).
+        centre (e.g. :math: r = sqrt(x**2 + y**2)).
 
         Parameters
         ----------
@@ -306,7 +311,8 @@ class EllProfile(SphProfile):
         """
         return np.sqrt(
             np.add(
-                np.square(grid[:, 1]), np.square(np.divide(grid[:, 0], self.axis_ratio))
+                np.square(grid.array[:, 1]),
+                np.square(np.divide(grid.array[:, 0], self.axis_ratio)),
             )
         )
 
@@ -329,9 +335,9 @@ class EllProfile(SphProfile):
             The (y, x) coordinates in the reference frame of the elliptical profile.
         """
 
-        grid_radii = self.elliptical_radii_grid_from(grid=grid, **kwargs)
+        grid_radii = self.elliptical_radii_grid_from(grid=grid, **kwargs).array
 
-        return np.multiply(np.sqrt(self.axis_ratio), grid_radii).view(np.ndarray)
+        return np.multiply(np.sqrt(self.axis_ratio), grid_radii)  # .view(np.ndarray)
 
     @aa.grid_dec.to_grid
     def transformed_to_reference_frame_grid_from(

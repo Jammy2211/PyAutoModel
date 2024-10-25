@@ -662,9 +662,7 @@ class OperateDeflections:
         einstein_radius_list = self.einstein_radius_list_from(
             grid=grid, pixel_scale=pixel_scale
         )
-        return [
-            np.pi * einstein_radius**2 for einstein_radius in einstein_radius_list
-        ]
+        return [np.pi * einstein_radius**2 for einstein_radius in einstein_radius_list]
 
     @evaluation_grid
     def einstein_mass_angular_from(

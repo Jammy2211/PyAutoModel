@@ -60,6 +60,7 @@ def _fit_ellipse_from(
     for dataset, ellipse_list, multipole_lists in zip(
         dataset_list, ellipse_list_list, multipole_list_list
     ):
+
         for ellipse, multipole_list in zip(ellipse_list, multipole_lists):
             fit_dataset_list.append(
                 FitEllipse(

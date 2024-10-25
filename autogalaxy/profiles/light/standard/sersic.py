@@ -1,4 +1,5 @@
-import numpy as np
+from autofit.jax_wrapper import numpy as np
+from numpy import seterr
 from typing import Optional, Tuple
 
 import autoarray as aa
@@ -127,7 +128,7 @@ class Sersic(AbstractSersic, LightProfile):
         grid_radii
             The radial distances from the centre of the profile, for each coordinate on the grid.
         """
-        np.seterr(all="ignore")
+        seterr(all="ignore")
         return np.multiply(
             self._intensity,
             np.exp(
@@ -135,7 +136,7 @@ class Sersic(AbstractSersic, LightProfile):
                     -self.sersic_constant,
                     np.add(
                         np.power(
-                            np.divide(grid_radii, self.effective_radius),
+                            np.divide(np.array(grid_radii), self.effective_radius),
                             1.0 / self.sersic_index,
                         ),
                         -1,

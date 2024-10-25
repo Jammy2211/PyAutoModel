@@ -94,7 +94,6 @@ class ShearYX2D(aa.VectorYX2D, AbstractShearField):
 
 
 class ShearYX2DIrregular(aa.VectorYX2DIrregular, AbstractShearField):
-
     """
     An irregular shear field, which is collection of (y,x) vectors which are located on an irregular grid
     of (y,x) coordinates.

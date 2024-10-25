@@ -43,9 +43,7 @@ def kappa_s_and_scale_radius(
 
     ##############################
     def integrand(r):
-        return (r**2 / r**inner_slope) * (1 + r / scale_radius_kpc) ** (
-            inner_slope - 3
-        )
+        return (r**2 / r**inner_slope) * (1 + r / scale_radius_kpc) ** (inner_slope - 3)
 
     de_c = (
         (overdens / 3.0)

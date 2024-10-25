@@ -1,5 +1,5 @@
 from astropy import units
-import numpy as np
+from autofit.jax_wrapper import numpy as np
 from typing import Tuple
 
 

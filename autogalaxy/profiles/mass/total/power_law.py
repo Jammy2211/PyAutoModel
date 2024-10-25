@@ -1,4 +1,13 @@
-import numpy as np
+import os
+
+if os.environ.get("USE_JAX", "0") == "1":
+    USING_JAX = True
+    import jax.numpy as np
+    from .jax_utils import omega
+else:
+    USING_JAX = False
+    import numpy as np
+
 from scipy import special
 from typing import Tuple
 
@@ -79,20 +88,24 @@ class PowerLaw(PowerLawCore):
         angle = np.arctan2(
             grid[:, 0], np.multiply(self.axis_ratio, grid[:, 1])
         )  # Note, this angle is not the position angle
-        R = np.sqrt(
-            np.add(np.multiply(self.axis_ratio**2, grid[:, 1] ** 2), grid[:, 0] ** 2)
-        )
         z = np.add(
             np.multiply(np.cos(angle), 1 + 0j), np.multiply(np.sin(angle), 0 + 1j)
         )
 
+        if USING_JAX:
+            # offset radius so calculation is finite at (0, 0)
+            R = np.sqrt((self.axis_ratio * grid[:, 1]) ** 2 + grid[:, 0] ** 2 + 1e-16)
+            zh = omega(z, slope, factor, n_terms=20)
+        else:
+            R = np.sqrt(
+                np.add(
+                    np.multiply(self.axis_ratio**2, grid[:, 1] ** 2), grid[:, 0] ** 2
+                )
+            )
+            zh = z * special.hyp2f1(1.0, 0.5 * slope, 2.0 - 0.5 * slope, -factor * z**2)
+
         complex_angle = (
-            2.0
-            * b
-            / (1.0 + self.axis_ratio)
-            * (b / R) ** (slope - 1.0)
-            * z
-            * special.hyp2f1(1.0, 0.5 * slope, 2.0 - 0.5 * slope, -factor * z**2)
+            2.0 * b / (1.0 + self.axis_ratio) * (b / R) ** (slope - 1.0) * zh
         )
 
         deflection_y = complex_angle.imag

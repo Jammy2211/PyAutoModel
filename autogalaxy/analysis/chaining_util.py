@@ -166,19 +166,19 @@ def source_from(
     return source_custom_model_from(result=result, source_is_model=True)
 
 
-def extra_galaxies_from(
+def clumps_from(
     result: Result,
     light_as_model: bool = False,
     mass_as_model: bool = False,
     free_centre: bool = False,
 ) -> af.Collection:
     """
-    The extra galaxies API models the light and / or mass of additional galaxies surrouding the main galaxy or
-    strong lens system.
+    The clump API models the light and / or mass of additional galaxies surrouding the main galaxy or strong lens
+    system.
 
-    This function performs model composition of extra galaxies for fits using the search chaining API. It makes it
-    possible to pass the extra galaxy parameters from a previous search to a new search, such that the new extra
-    galaxies are either treated as an instance or model component.
+    This function performs model composition of clumps for fits using the search chaining API. It makes it possible to
+    pass the clump parameters from a previous search to a new search, such that the new clumps are either treated
+    as an instance or model component.
 
     This function currently requires that mass profiles are `IsothermalSph` objects and that light profiles are
     `Sersic` objects. This will be generalised in the future.
@@ -186,70 +186,57 @@ def extra_galaxies_from(
     Parameters
     ----------
     result
-        The result, which includes extra galaxies, of the previous search, which via prior passing are used to create
-        the new extra galaxy model.
+        The result, which includes clumps, of the previous search, which via prior passing are used to create the new
+        clump model.
     light_as_model
-        If `True`, the extra_galaxy light is passed as a model component, else it is a fixed instance.
+        If `True`, the clump light is passed as a model component, else it is a fixed instance.
     mass_as_model
-        If `True`, the extra_galaxy mass is passed as a model component, else it is a fixed instance.
+        If `True`, the clump mass is passed as a model component, else it is a fixed instance.
     free_centre
         If `True`, the requested mass and/or light model centres are passed as a model, else they are fixed.
 
     Returns
     -------
     af.Collection
-        A collection of extra galaxy `Galaxy` objects, where each is either an instance or model component.
+        A collection of clump `Galaxy` objects, where each clump is either an instance or model component.
     """
     # ideal API:
 
-    # extra_galaxies = result.instance.extra_galaxies.as_model((LightProfile, mp.MassProfile,), fixed="centre", prior_pass=True)
-
-    if result.instance.extra_galaxies is None:
-        return None
+    # clumps = result.instance.clumps.as_model((LightProfile, mp.MassProfile,), fixed="centre", prior_pass=True)
 
     if mass_as_model:
-        extra_galaxies = result.instance.extra_galaxies.as_model((MassProfile,))
+        clumps = result.instance.clumps.as_model((MassProfile,))
 
-        for extra_galaxy_index in range(len(result.instance.extra_galaxies)):
-            if hasattr(result.instance.extra_galaxies[extra_galaxy_index], "mass"):
-                extra_galaxies[
-                    extra_galaxy_index
-                ].mass.centre = result.instance.extra_galaxies[
-                    extra_galaxy_index
+        for clump_index in range(len(result.instance.clumps)):
+            if hasattr(result.instance.clumps[clump_index], "mass"):
+                clumps[clump_index].mass.centre = result.instance.clumps[
+                    clump_index
                 ].mass.centre
-                extra_galaxies[
-                    extra_galaxy_index
-                ].mass.einstein_radius = result.model.extra_galaxies[
-                    extra_galaxy_index
+                clumps[clump_index].mass.einstein_radius = result.model.clumps[
+                    clump_index
                 ].mass.einstein_radius
                 if free_centre:
-                    extra_galaxies[
-                        extra_galaxy_index
-                    ].mass.centre = result.model.extra_galaxies[
-                        extra_galaxy_index
+                    clumps[clump_index].mass.centre = result.model.clumps[
+                        clump_index
                     ].mass.centre
 
     elif light_as_model:
-        extra_galaxies = result.instance.extra_galaxies.as_model((LightProfile,))
+        clumps = result.instance.clumps.as_model((LightProfile,))
 
-        for extra_galaxy_index in range(len(result.instance.extra_galaxies)):
-            if extra_galaxies[extra_galaxy_index].bulge is not None:
-                extra_galaxies[
-                    extra_galaxy_index
-                ].bulge.centre = result.instance.extra_galaxies[
-                    extra_galaxy_index
-                ].bulge.centre
+        for clump_index in range(len(result.instance.clumps)):
+            if clumps[clump_index].light is not None:
+                clumps[clump_index].light.centre = result.instance.clumps[
+                    clump_index
+                ].light.centre
                 if free_centre:
-                    extra_galaxies[
-                        extra_galaxy_index
-                    ].bulge.centre = result.model.extra_galaxies[
-                        extra_galaxy_index
-                    ].bulge.centre
+                    clumps[clump_index].light.centre = result.model.clumps[
+                        clump_index
+                    ].light.centre
 
     else:
-        extra_galaxies = result.instance.extra_galaxies.as_model(())
+        clumps = result.instance.clumps.as_model(())
 
-    return extra_galaxies
+    return clumps
 
 
 def lp_chain_tracer_from(light_result, settings_search):

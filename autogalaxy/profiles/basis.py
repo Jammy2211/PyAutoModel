@@ -125,9 +125,11 @@ class Basis(LightProfile, MassProfile):
         The image of the light profiles in the basis summed together.
         """
         return [
-            light_profile.image_2d_from(grid=grid, operated_only=operated_only)
-            if not isinstance(light_profile, lp_linear.LightProfileLinear)
-            else np.zeros((grid.shape[0],))
+            (
+                light_profile.image_2d_from(grid=grid, operated_only=operated_only)
+                if not isinstance(light_profile, lp_linear.LightProfileLinear)
+                else np.zeros((grid.shape[0],))
+            )
             for light_profile in self.light_profile_list
         ]
 

@@ -1,17 +1,13 @@
 import copy
 import logging
 from typing import Optional, Union
-import os
 
-from autoconf import conf
 from autoconf.dictable import to_dict, output_to_json
 import autofit as af
 import autoarray as aa
 
 from autogalaxy.analysis.adapt_images.adapt_image_maker import AdaptImageMaker
 from autogalaxy.analysis.adapt_images.adapt_images import AdaptImages
-from autogalaxy.analysis.maker import FitMaker
-from autogalaxy.analysis.preloads import Preloads
 from autogalaxy.cosmology.lensing import LensingCosmology
 from autogalaxy.cosmology.wrap import Planck15
 from autogalaxy.analysis.analysis.analysis import Analysis
@@ -62,17 +58,7 @@ class AnalysisDataset(Analysis):
 
         self.settings_inversion = settings_inversion or aa.SettingsInversion()
 
-        self.preloads = self.preloads_cls()
-
         self.title_prefix = title_prefix
-
-    @property
-    def preloads_cls(self):
-        return Preloads
-
-    @property
-    def fit_maker_cls(self):
-        return FitMaker
 
     @property
     def adapt_images(self):
@@ -81,67 +67,6 @@ class AnalysisDataset(Analysis):
 
         if self.adapt_image_maker is not None:
             return self.adapt_image_maker.adapt_images
-
-    def set_preloads(self, paths: af.DirectoryPaths, model: af.Collection):
-        """
-        It is common for the model to have components whose parameters are all fixed, and thus the way that component
-        fits the data does not change. For example, if all parameter associated with the light profiles of galaxies
-        in the model are fixed, the image generated from these galaxies will not change irrespective of the model
-        parameters chosen by the non-linear search.
-
-        Preloading exploits this to speed up the log likelihood function, by inspecting the model and storing in memory
-        quantities that do not change. For the example above, the image of all galaxies would be stored in memory and
-        to perform every fit in the `log_likelihood_funtion`.
-
-        This function sets up all preload quantities, which are described fully in the `preloads` modules. This
-        occurs directly before the non-linear search begins, to ensure the model parameterization is fixed.
-
-        Parameters
-        ----------
-        paths
-            The paths object which manages all paths, e.g. where the non-linear search outputs are stored,
-            visualization and the pickled objects used by the aggregator output by this function.
-        model
-            The model object, which includes model components representing the galaxies that are fitted to
-            the imaging data.
-        """
-
-        logger.info(
-            "PRELOADS - Setting up preloads, may take a few minutes for fits using an inversion."
-        )
-
-        self.preloads = self.preloads_cls()
-
-        settings_inversion_original = copy.copy(self.settings_inversion)
-
-        self.settings_inversion.image_mesh_min_mesh_pixels_per_pixel = None
-        self.settings_inversion.image_mesh_adapt_background_percent_threshold = None
-
-        fit_maker = self.fit_maker_cls(model=model, fit_from=self.fit_from)
-
-        fit_0 = fit_maker.fit_via_model_from(unit_value=0.45)
-        fit_1 = fit_maker.fit_via_model_from(unit_value=0.55)
-
-        if fit_0 is None or fit_1 is None:
-            self.preloads = self.preloads_cls(failed=True)
-
-            self.settings_inversion = settings_inversion_original
-
-        else:
-            self.preloads = self.preloads_cls.setup_all_via_fits(
-                fit_0=fit_0, fit_1=fit_1
-            )
-
-            if conf.instance["general"]["test"]["check_preloads"]:
-                self.preloads.check_via_fit(fit=fit_0)
-
-            self.settings_inversion = settings_inversion_original
-
-        if isinstance(paths, af.DatabasePaths):
-            return
-
-        os.makedirs(paths.profile_path, exist_ok=True)
-        self.preloads.output_info_to_summary(file_path=paths.profile_path)
 
     def save_attributes(self, paths: af.DirectoryPaths):
         """
@@ -165,7 +90,7 @@ class AnalysisDataset(Analysis):
         Parameters
         ----------
         paths
-            The paths object which manages all paths, e.g. where the non-linear search outputs are stored,
+            The PyAutoFit paths object which manages all paths, e.g. where the non-linear search outputs are stored,
             visualization, and the pickled objects used by the aggregator output by this function.
         """
         paths.save_fits(
@@ -220,7 +145,7 @@ class AnalysisDataset(Analysis):
         Parameters
         ----------
         paths
-            The paths object which manages all paths, e.g. where the non-linear search outputs are stored,
+            The PyAutoFit paths object which manages all paths, e.g. where the non-linear search outputs are stored,
             visualization and the pickled objects used by the aggregator output by this function.
         result
             The result of a model fit, including the non-linear search, samples and maximum likelihood tracer.

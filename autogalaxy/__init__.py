@@ -4,7 +4,6 @@ from autoarray.dataset.imaging.dataset import Imaging  # noqa
 from autoarray.dataset.interferometer.dataset import Interferometer  # noqa
 from autoarray.dataset.dataset_model import DatasetModel
 from autoarray.dataset.over_sampling import OverSamplingDataset
-from autoarray.inversion.inversion.mapper_valued import MapperValued
 from autoarray.inversion.pixelization import mesh  # noqa
 from autoarray.inversion import regularization as reg  # noqa
 from autoarray.inversion.pixelization import image_mesh
@@ -53,8 +52,6 @@ from autoarray.structures.visibilities import VisibilitiesNoiseMap  # noqa
 
 from .analysis.adapt_images.adapt_images import AdaptImages
 from .analysis.adapt_images.adapt_image_maker import AdaptImageMaker
-from .analysis.maker import FitMaker
-from .analysis.preloads import Preloads
 from . import aggregator as agg
 from . import exc
 from . import plot
@@ -110,6 +107,8 @@ from .util.shear_field import ShearYX2DIrregular
 from . import cosmology as cosmo
 from .gui.clicker import Clicker
 from .gui.scribbler import Scribbler
+
+from .analysis.clump_model import ClumpModel
 
 from autoconf import conf
 

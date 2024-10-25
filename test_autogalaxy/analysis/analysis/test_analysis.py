@@ -11,11 +11,10 @@ directory = path.dirname(path.realpath(__file__))
 
 def test__galaxies_via_instance(masked_imaging_7x7):
     galaxy = ag.Galaxy(redshift=0.5, light=ag.lp.Sersic(intensity=0.1))
-    extra_galaxy = ag.Galaxy(redshift=0.5, light=ag.lp.Sersic(intensity=0.2))
+    clump = ag.Galaxy(redshift=0.5, light=ag.lp.Sersic(intensity=0.2))
 
     model = af.Collection(
-        galaxies=af.Collection(galaxy=galaxy),
-        extra_galaxies=af.Collection(extra_galaxy_0=extra_galaxy),
+        galaxies=af.Collection(galaxy=galaxy), clumps=af.Collection(clump_0=clump)
     )
 
     analysis = ag.AnalysisImaging(dataset=masked_imaging_7x7)

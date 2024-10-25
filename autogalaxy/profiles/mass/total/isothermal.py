@@ -1,4 +1,12 @@
-import numpy as np
+import os
+
+if os.environ.get("USE_JAX", "0") == "1":
+    USING_JAX = True
+    import jax.numpy as np
+else:
+    USING_JAX = False
+    import numpy as np
+
 from typing import Tuple
 
 import autoarray as aa
@@ -30,14 +38,21 @@ def psi_from(grid, axis_ratio, core_radius):
         The value of the Psi term.
 
     """
-    return np.sqrt(
-        np.add(
-            np.multiply(
-                axis_ratio**2.0, np.add(np.square(grid[:, 1]), core_radius**2.0)
-            ),
-            np.square(grid[:, 0]),
+    if USING_JAX:
+        return np.sqrt(
+            (axis_ratio**2.0 * (grid[:, 1] ** 2.0 + core_radius**2.0))
+            + grid[:, 0] ** 2.0
+            + 1e-16
         )
-    )
+    else:
+        return np.sqrt(
+            np.add(
+                np.multiply(
+                    axis_ratio**2.0, np.add(np.square(grid[:, 1]), core_radius**2.0)
+                ),
+                np.square(grid[:, 0]),
+            )
+        )
 
 
 class Isothermal(PowerLaw):

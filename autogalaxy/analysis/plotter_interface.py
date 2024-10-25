@@ -379,7 +379,7 @@ class PlotterInterface:
         Visualizes the adapt images used by a model-fit for adaptive pixelization mesh's and regularization.
 
         Images are output to the `image` folder of the `image_path` in a subfolder called `adapt`. When
-        used with a non-linear search the `image_path` is the output folder of the non-linear search.
+        used with a non-linear search the `image_path` points to the search's results folder.
 
         Visualization includes an image of the overall adapt model image and a subplot of all galaxy images on the same
         figure.

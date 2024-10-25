@@ -20,10 +20,10 @@ class VisualizerImaging(af.Visualizer):
         Parameters
         ----------
         paths
-            The paths object which manages all paths, e.g. where the non-linear search outputs are stored,
+            The PyAutoFit paths object which manages all paths, e.g. where the non-linear search outputs are stored,
             visualization and the pickled objects used by the aggregator output by this function.
         model
-            The model object, which includes model components representing the galaxies that are fitted to
+            The PyAutoFit model object, which includes model components representing the galaxies that are fitted to
             the imaging data.
         """
 
@@ -63,7 +63,7 @@ class VisualizerImaging(af.Visualizer):
         Parameters
         ----------
         paths
-            The paths object which manages all paths, e.g. where the non-linear search outputs are stored,
+            The PyAutoFit paths object which manages all paths, e.g. where the non-linear search outputs are stored,
             visualization, and the pickled objects used by the aggregator output by this function.
         instance
             An instance of the model that is being fitted to the data by this analysis (whose parameters have been set
@@ -94,82 +94,3 @@ class VisualizerImaging(af.Visualizer):
         )
         if fit.inversion is not None:
             plotter.inversion(inversion=fit.inversion, during_analysis=during_analysis)
-
-    @staticmethod
-    def visualize_before_fit_combined(
-        analyses,
-        paths: af.AbstractPaths,
-        model: af.AbstractPriorModel,
-    ):
-        """
-        Performs visualization before the non-linear search begins of information which shared across all analyses
-        on a single matplotlib figure.
-
-        This function outputs visuals of all information which does not vary during the fit, for example the dataset
-        being fitted.
-
-        Parameters
-        ----------
-        analyses
-            The list of all analysis objects used for fitting via yhe non-linear search.
-        paths
-            The paths object which manages all paths, e.g. where the non-linear search outputs are stored,
-            visualization and the pickled objects used by the aggregator output by this function.
-        model
-            The model object, which includes model components representing the galaxies that are fitted to
-            the imaging data.
-        """
-
-        if analyses is None:
-            return
-
-        plotter = PlotterInterfaceImaging(
-            image_path=paths.image_path, title_prefix=analyses[0].title_prefix
-        )
-
-        dataset_list = [analysis.dataset for analysis in analyses]
-
-        plotter.imaging_combined(
-            dataset_list=dataset_list,
-        )
-
-    @staticmethod
-    def visualize_combined(
-        analyses,
-        paths: af.AbstractPaths,
-        instance: af.ModelInstance,
-        during_analysis: bool,
-    ):
-        """
-        Performs visualization during the non-linear search of information which is shared across all analyses on a
-        single matplotlib figure.
-
-        This function outputs visuals of all information which varies during the fit, for example the model-fit to
-        the dataset being fitted.
-
-        Parameters
-        ----------
-        analyses
-            The list of all analysis objects used for fitting via yhe non-linear search.
-        paths
-            The paths object which manages all paths, e.g. where the non-linear search outputs are stored,
-            visualization and the pickled objects used by the aggregator output by this function.
-        model
-            The model object, which includes model components representing the galaxies that are fitted to
-            the imaging data.
-        """
-        if analyses is None:
-            return
-
-        plotter = PlotterInterfaceImaging(
-            image_path=paths.image_path, title_prefix=analyses[0].title_prefix
-        )
-
-        fit_list = [
-            analysis.fit_from(instance=single_instance)
-            for analysis, single_instance in zip(analyses, instance)
-        ]
-
-        plotter.fit_imaging_combined(
-            fit_list=fit_list,
-        )

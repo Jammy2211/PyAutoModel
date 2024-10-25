@@ -1,5 +1,3 @@
-analysis:
-  preload_attempts: 250
 fits:
   flip_for_ds9: true
 grid:
@@ -11,6 +9,4 @@ inversion:
   use_border_relocator: true          # If True, by default a pixelization's border is used to relocate all pixels outside its border to the border.
 test:
   check_likelihood_function: true   # if True, when a search is resumed the likelihood of a previous sample is recalculated to ensure it is consistent with the previous run.
-  check_preloads: false
   exception_override: false
-  preloads_check_threshold: 1.0     # If the figure of merit of a fit with and without preloads is greater than this threshold, the check preload test fails and an exception raised for a model-fit. 

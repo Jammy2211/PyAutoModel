@@ -166,13 +166,13 @@ class Scribbler:
         junk_mask = masks["1"]
         feature_mask = masks["2"]
         plt.ioff()
-        # plt.figure()
-        # plt.subplot(121)
-        # plt.imshow(junk_mask.astype("int"), cmap="gray")
-        # plt.title("Junk mask")
-        # plt.subplot(122)
-        # plt.imshow(feature_mask.astype("int"), cmap="gray")
-        # plt.title("Feature mask")
+        plt.figure()
+        plt.subplot(121)
+        plt.imshow(junk_mask.astype("int"), cmap="gray")
+        plt.title("Junk mask")
+        plt.subplot(122)
+        plt.imshow(feature_mask.astype("int"), cmap="gray")
+        plt.title("Feature mask")
         # plt.show()
         return junk_mask
 

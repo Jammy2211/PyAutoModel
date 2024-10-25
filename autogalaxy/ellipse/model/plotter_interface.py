@@ -17,7 +17,7 @@ class PlotterInterfaceEllipse(PlotterInterface):
         Visualizes an `Imaging` dataset object.
 
         Images are output to the `image` folder of the `image_path` in a subfolder called `imaging`. When used with
-        a non-linear search the `image_path` is the output folder of the non-linear search.
+        a non-linear search the `image_path` points to the search's results folder.
         `.
         Visualization includes individual images of attributes of the dataset (e.g. the image, noise map, PSF) and a
         subplot of all these attributes on the same figure.

@@ -147,7 +147,7 @@ class AnalysisQuantity(Analysis):
         Parameters
         ----------
         paths
-            The paths object which manages all paths, e.g. where the non-linear search outputs are stored,
+            The PyAutoFit paths object which manages all paths, e.g. where the non-linear search outputs are stored,
             visualization, and the pickled objects used by the aggregator output by this function.
         """
         paths.save_fits(

@@ -15,7 +15,6 @@ from autogalaxy.profiles.basis import Basis
 from autogalaxy.profiles.light.linear import LightProfileLinear
 from autogalaxy.galaxy.galaxy import Galaxy
 from autogalaxy.galaxy.galaxies import Galaxies
-from autogalaxy.analysis.preloads import Preloads
 
 
 class AbstractToInversion:
@@ -24,7 +23,6 @@ class AbstractToInversion:
         dataset: Optional[Union[aa.Imaging, aa.Interferometer, aa.DatasetInterface]],
         adapt_images: Optional[AdaptImages] = None,
         settings_inversion: aa.SettingsInversion = aa.SettingsInversion(),
-        preloads=Preloads(),
         run_time_dict: Optional[Dict] = None,
     ):
         """
@@ -59,8 +57,6 @@ class AbstractToInversion:
             the pixelization's pixels to the brightest regions of the image.
         settings_inversion
             The settings of the inversion, which controls how the linear algebra calculation is performed.
-        preloads
-            Preloads of the inversion, which are used to speed up the linear algebra calculation.
         run_time_dict
             A dictionary of run-time values used to compute the inversion, for example the noise-map normalization.
         """
@@ -82,7 +78,6 @@ class AbstractToInversion:
 
         self.settings_inversion = settings_inversion
 
-        self.preloads = preloads
         self.run_time_dict = run_time_dict
 
     @property
@@ -198,7 +193,6 @@ class GalaxiesToInversion(AbstractToInversion):
         galaxies: List[Galaxy],
         adapt_images: Optional[AdaptImages] = None,
         settings_inversion: aa.SettingsInversion = aa.SettingsInversion(),
-        preloads=aa.Preloads(),
         run_time_dict: Optional[Dict] = None,
     ):
         """
@@ -234,8 +228,6 @@ class GalaxiesToInversion(AbstractToInversion):
             the pixelization's pixels to the brightest regions of the image.
         settings_inversion
             The settings of the inversion, which controls how the linear algebra calculation is performed.
-        preloads
-            Preloads of the inversion, which are used to speed up the linear algebra calculation.
         run_time_dict
             A dictionary of run-time values used to compute the inversion, for example the noise-map normalization.
         """
@@ -245,7 +237,6 @@ class GalaxiesToInversion(AbstractToInversion):
             dataset=dataset,
             adapt_images=adapt_images,
             settings_inversion=settings_inversion,
-            preloads=preloads,
             run_time_dict=run_time_dict,
         )
 
@@ -500,7 +491,6 @@ class GalaxiesToInversion(AbstractToInversion):
             source_plane_mesh_grid=source_plane_mesh_grid,
             image_plane_mesh_grid=image_plane_mesh_grid,
             adapt_data=adapt_galaxy_image,
-            preloads=self.preloads,
             run_time_dict=self.run_time_dict,
         )
 
@@ -592,7 +582,6 @@ class GalaxiesToInversion(AbstractToInversion):
             dataset=self.dataset,
             linear_obj_list=self.linear_obj_list,
             settings=self.settings_inversion,
-            preloads=self.preloads,
             run_time_dict=self.run_time_dict,
         )
 

@@ -1,6 +1,7 @@
 fits:
   flip_for_ds9: true
 grid:
+  remove_projected_centre: false   # Whether 1D plots of a light profile should remove the central point to avoid the large numerical central value skewing the y axis.
   max_evaluation_grid_size: 1000   # An evaluation grid whose shape is adaptive chosen is used to compute quantities like critical curves, this integer is the max size of the grid ensuring faster run times.
 adapt:
   adapt_minimum_percent: 0.01

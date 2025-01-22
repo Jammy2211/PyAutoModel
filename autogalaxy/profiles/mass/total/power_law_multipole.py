@@ -171,18 +171,18 @@ class PowerLawMultipole(MassProfile):
                 * self.einstein_radius ** (self.slope - 1.0)
                 * radial_grid ** (2.0 - self.slope)
             )
-            / (self.m**2.0 - (3.0 - self.slope))
+            / (self.m**2.0 - (3.0 - self.slope) ** 2.0)
             * self.k_m
             * np.cos(self.m * (polar_angle_grid - self.angle_m))
         )
 
         a_angle = (
             (
-                self.m**2.0
+                self.m
                 * self.einstein_radius ** (self.slope - 1.0)
                 * radial_grid ** (2.0 - self.slope)
             )
-            / (self.m**2.0 - (3.0 - self.slope))
+            / (self.m**2.0 - (3.0 - self.slope) ** 2.0)
             * self.k_m
             * np.sin(self.m * (polar_angle_grid - self.angle_m))
         )

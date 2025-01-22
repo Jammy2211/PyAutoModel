@@ -103,7 +103,7 @@ def test__unmasked_blurred_image_2d_from():
         pixel_scales=1.0,
     )
 
-    grid = ag.Grid2D.from_mask(mask=mask)
+    grid = ag.Grid2D.from_mask(mask=mask, over_sample_size=1)
 
     lp = ag.lp.Sersic(intensity=0.1)
 

@@ -44,7 +44,11 @@ def test__luminosity_within_centre__compare_to_gridded_calculations():
 
 
 def test__image_1d_from__grid_2d_in__returns_1d_image_via_projected_quantities():
-    grid_2d = ag.Grid2D.uniform(shape_native=(5, 5), pixel_scales=1.0)
+    grid_2d = ag.Grid2D.uniform(
+        shape_native=(5, 5),
+        pixel_scales=1.0,
+        over_sample_size=1,
+    )
 
     lp = ag.lp.Gaussian(
         centre=(0.0, 0.0), ell_comps=(0.0, 0.0), intensity=1.0, sigma=1.0
@@ -87,17 +91,13 @@ def test__decorator__oversample_uniform__numerical_values(gal_x1_lp):
 
     lp = ag.lp.Sersic(intensity=1.0)
 
-    over_sampling = ag.OverSamplingUniform(sub_size=1)
-
-    grid = ag.Grid2D.from_mask(mask=mask, over_sampling=over_sampling)
+    grid = ag.Grid2D.from_mask(mask=mask, over_sample_size=1)
 
     image = lp.image_2d_from(grid=grid)
 
     assert image[0] == pytest.approx(0.15987224303572964, 1.0e-6)
 
-    over_sampling = ag.OverSamplingUniform(sub_size=2)
-
-    grid = ag.Grid2D.from_mask(mask=mask, over_sampling=over_sampling)
+    grid = ag.Grid2D.from_mask(mask=mask, over_sample_size=2)
 
     image = lp.image_2d_from(grid=grid)
 
@@ -106,79 +106,18 @@ def test__decorator__oversample_uniform__numerical_values(gal_x1_lp):
 
     lp = ag.lp.Sersic(centre=(3.0, 3.0), intensity=1.0)
 
-    over_sampling = ag.OverSamplingUniform(sub_size=1)
-
-    grid = ag.Grid2D.from_mask(mask=mask, over_sampling=over_sampling)
+    grid = ag.Grid2D.from_mask(mask=mask, over_sample_size=1)
 
     image = lp.image_2d_from(grid=grid)
 
     assert image[0] == pytest.approx(0.006719704400094508, 1.0e-6)
 
-    over_sampling = ag.OverSamplingUniform(sub_size=2)
-
-    grid = ag.Grid2D.from_mask(mask=mask, over_sampling=over_sampling)
+    grid = ag.Grid2D.from_mask(mask=mask, over_sample_size=2)
 
     image = lp.image_2d_from(grid=grid)
 
     assert image[0] == pytest.approx(0.00681791, 1.0e-6)
     assert image[1] == pytest.approx(0.01332332, 1.0e-6)
-
-
-def test__decorators__grid_iterate_in__iterates_grid_correctly():
-    mask = ag.Mask2D(
-        mask=[
-            [True, True, True, True, True],
-            [True, False, False, False, True],
-            [True, False, False, False, True],
-            [True, False, False, False, True],
-            [True, True, True, True, True],
-        ],
-        pixel_scales=(1.0, 1.0),
-    )
-
-    grid = ag.Grid2D.from_mask(
-        mask=mask,
-        over_sampling=ag.OverSamplingIterate(fractional_accuracy=1.0, sub_steps=[2]),
-    )
-
-    lp = ag.lp.Sersic(intensity=1.0)
-
-    image = lp.image_2d_from(grid=grid)
-
-    grid_sub_2 = ag.Grid2D(
-        values=grid, mask=mask, over_sampling=ag.OverSamplingUniform(sub_size=2)
-    )
-    image_sub_2 = lp.image_2d_from(grid=grid_sub_2)
-
-    assert image[0] == pytest.approx(0.17481917, 1.0e-4)
-    assert (image == image_sub_2).all()
-
-    grid = ag.Grid2D.from_mask(
-        mask=mask,
-        over_sampling=ag.OverSamplingIterate(
-            fractional_accuracy=0.95, sub_steps=[2, 4, 8]
-        ),
-    )
-
-    lp = ag.lp.Sersic(centre=(0.08, 0.08), intensity=1.0)
-
-    image = lp.image_2d_from(grid=grid)
-
-    grid_sub_4 = ag.Grid2D(
-        values=grid, mask=mask, over_sampling=ag.OverSamplingUniform(sub_size=4)
-    )
-    image_sub_4 = lp.image_2d_from(grid=grid_sub_4)
-
-    assert image[0] == pytest.approx(0.17754459861988386, 1.0e-4)
-    assert image[0] == image_sub_4[0]
-
-    grid_sub_8 = ag.Grid2D(
-        values=grid, mask=mask, over_sampling=ag.OverSamplingUniform(sub_size=8)
-    )
-    image_sub_8 = lp.image_2d_from(grid=grid_sub_8)
-
-    assert image[4] == pytest.approx(4.173185729427679, 1.0e-4)
-    assert image[4] == image_sub_8[4]
 
 
 def test__regression__centre_of_profile_in_right_place():
@@ -193,19 +132,3 @@ def test__regression__centre_of_profile_in_right_place():
     image = lp.image_2d_from(grid=grid)
     max_indexes = np.unravel_index(image.native.argmax(), image.shape_native)
     assert max_indexes == (1, 4)
-
-    # grid = ag.Grid2D.uniform(
-    #     shape_native=(7, 7),
-    #     pixel_scales=1.0,
-    #     over_sampling=ag.OverSamplingIterate(fractional_accuracy=0.99, sub_steps=[2, 4]),
-    # )
-    #
-    # lp = ag.lp.Sersic(centre=(2.0, 1.0), intensity=1.0)
-    # image = lp.image_2d_from(grid=grid)
-    # max_indexes = np.unravel_index(image.native.argmax(), image.shape_native)
-    # assert max_indexes == (1, 4)
-    #
-    # lp = ag.lp.SersicSph(centre=(2.0, 1.0), intensity=1.0)
-    # image = lp.image_2d_from(grid=grid)
-    # max_indexes = np.unravel_index(image.native.argmax(), image.shape_native)
-    # assert max_indexes == (1, 4)

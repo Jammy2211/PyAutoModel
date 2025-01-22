@@ -56,7 +56,7 @@ class FitQuantity(aa.FitImaging):
     def model_data(self):
         if self.model_data_manual is None:
             func = getattr(self.light_mass_obj, self.func_str)
-            return func(grid=self.grids.uniform)
+            return func(grid=self.grids.lp)
 
         return self.model_data_manual
 

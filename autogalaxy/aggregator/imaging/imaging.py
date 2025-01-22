@@ -50,19 +50,39 @@ def _imaging_from(
         except AttributeError:
             psf = None
 
-        over_sampling = fit.value(name="dataset.over_sampling")
-
         dataset = aa.Imaging(
             data=data,
             noise_map=noise_map,
             psf=psf,
-            over_sampling=over_sampling,
             check_noise_map=False,
         )
 
         mask = aa.Mask2D.from_primary_hdu(primary_hdu=fit.value(name="dataset.mask"))
 
         dataset = dataset.apply_mask(mask=mask)
+
+        try:
+            over_sample_size_lp = aa.Array2D.from_primary_hdu(
+                primary_hdu=fit.value(name="dataset.over_sample_size_lp")
+            ).native
+            over_sample_size_lp = over_sample_size_lp.apply_mask(mask=mask)
+        except AttributeError:
+            over_sample_size_lp = 1
+
+        try:
+            over_sample_size_pixelization = aa.Array2D.from_primary_hdu(
+                primary_hdu=fit.value(name="dataset.over_sample_size_pixelization")
+            ).native
+            over_sample_size_pixelization = over_sample_size_pixelization.apply_mask(
+                mask=mask
+            )
+        except AttributeError:
+            over_sample_size_pixelization = 1
+
+        dataset = dataset.apply_over_sampling(
+            over_sample_size_lp=over_sample_size_lp,
+            over_sample_size_pixelization=over_sample_size_pixelization,
+        )
 
         dataset_list.append(dataset)
 

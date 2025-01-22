@@ -9,7 +9,11 @@ import autogalaxy as ag
 
 
 def test__perfect_fit__chi_squared_0():
-    grid = ag.Grid2D.uniform(shape_native=(51, 51), pixel_scales=0.1)
+    grid = ag.Grid2D.uniform(
+        shape_native=(51, 51),
+        pixel_scales=0.1,
+        over_sample_size=1,
+    )
 
     galaxy_0 = ag.Galaxy(
         redshift=0.5, light=ag.lp.Sersic(centre=(0.1, 0.1), intensity=0.1)
@@ -136,7 +140,11 @@ def test__simulate_interferometer_data_and_fit__known_likelihood():
 
 
 def test__linear_light_profiles_agree_with_standard_light_profiles():
-    grid = ag.Grid2D.uniform(shape_native=(51, 51), pixel_scales=0.1)
+    grid = ag.Grid2D.uniform(
+        shape_native=(51, 51),
+        pixel_scales=0.1,
+        over_sample_size=1,
+    )
 
     galaxy = ag.Galaxy(
         redshift=0.5,
@@ -198,14 +206,14 @@ def test__linear_light_profiles_agree_with_standard_light_profiles():
     ] == pytest.approx(0.2, 1.0e-2)
     assert fit.log_likelihood == pytest.approx(fit_linear.log_likelihood, 1.0e-4)
 
-    galaxy_image = galaxy.image_2d_from(grid=dataset.grids.uniform)
+    galaxy_image = galaxy.image_2d_from(grid=dataset.grids.lp)
 
     assert fit_linear.galaxy_model_image_dict[galaxy_linear] == pytest.approx(
         galaxy_image, 1.0e-4
     )
 
     galaxy_visibilities = galaxy.visibilities_from(
-        grid=dataset.grids.uniform, transformer=dataset.transformer
+        grid=dataset.grids.lp, transformer=dataset.transformer
     )
 
     assert fit_linear.galaxy_model_visibilities_dict[galaxy_linear] == pytest.approx(

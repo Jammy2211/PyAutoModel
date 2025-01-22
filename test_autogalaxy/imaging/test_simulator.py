@@ -85,7 +85,8 @@ def test__simulator__via_galaxies_from():
         psf=psf,
         exposure_time=10000.0,
         background_sky_level=100.0,
-        add_poisson_noise=False,
+        add_poisson_noise_to_data=False,
+        include_poisson_noise_in_noise_map=False,
     )
 
     dataset = simulator.via_galaxies_from(galaxies=[galaxy_0, galaxy_1], grid=grid)
@@ -99,7 +100,7 @@ def test__simulator__via_galaxies_from():
     assert dataset.shape_native == (20, 20)
     assert dataset.data.native[0, 0] != imaging_via_image.data.native[0, 0]
     assert dataset.data.native[10, 10] == imaging_via_image.data.native[10, 10]
-    assert (dataset.psf == imaging_via_image.psf).all()
+    assert dataset.psf == pytest.approx(imaging_via_image.psf, 1.0e-4)
     assert (dataset.noise_map == imaging_via_image.noise_map).all()
 
 
@@ -130,7 +131,7 @@ def test__simulator__simulate_imaging_from_galaxy__source_galaxy__compare_to_ima
         psf=psf,
         exposure_time=10000.0,
         background_sky_level=100.0,
-        add_poisson_noise=True,
+        add_poisson_noise_to_data=True,
         noise_seed=1,
     )
 

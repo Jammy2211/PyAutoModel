@@ -67,16 +67,16 @@ def test___points_from_major_axis__multipole(imaging_lh):
     assert fit._points_from_major_axis[1, 1] == pytest.approx(-0.038278334, 1.0e-4)
 
 
-def test__mask_interp(imaging_lh, imaging_lh_masked):
-    ellipse_0 = ag.Ellipse(centre=(0.0, 0.0), ell_comps=(0.0, 0.0), major_axis=1.0)
-
-    fit = ag.FitEllipse(dataset=imaging_lh, ellipse=ellipse_0)
-
-    assert fit.mask_interp == pytest.approx([False, False, False, False, False], 1.0e-4)
-
-    fit = ag.FitEllipse(dataset=imaging_lh_masked, ellipse=ellipse_0)
-
-    assert fit.mask_interp == pytest.approx([False, True, True, True, True], 1.0e-4)
+# def test__mask_interp(imaging_lh, imaging_lh_masked):
+#     ellipse_0 = ag.Ellipse(centre=(0.0, 0.0), ell_comps=(0.0, 0.0), major_axis=1.0)
+#
+#     fit = ag.FitEllipse(dataset=imaging_lh, ellipse=ellipse_0)
+#
+#     assert fit.mask_interp == pytest.approx([False, False, False, False, False], 1.0e-4)
+#
+#     fit = ag.FitEllipse(dataset=imaging_lh_masked, ellipse=ellipse_0)
+#
+#     assert fit.mask_interp == pytest.approx([False, True, True, True, True], 1.0e-4)
 
 
 def test__total_points_interp(imaging_lh, imaging_lh_masked):

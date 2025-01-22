@@ -2,9 +2,6 @@ from collections import OrderedDict
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.colors as colors
-
-from skimage.transform import rescale
 
 
 class Scribbler:
@@ -16,6 +13,7 @@ class Scribbler:
         cmap=None,
         brush_width=0.05,
         backend="TkAgg",
+        mask_overlay=None,
     ):
         """
 
@@ -33,11 +31,18 @@ class Scribbler:
         # create initial plot
         self.figure = plt.figure()
         self.ax = self.figure.add_subplot(111)
+
         if cmap is None:
             plt.imshow(image, interpolation="none")
         else:
             norm = cmap.norm_from(array=image)
             plt.imshow(image, cmap=cmap.config_dict["cmap"], norm=norm)
+
+        if mask_overlay is not None:
+            grid = mask_overlay.derive_grid.edge
+            grid = mask_overlay.geometry.grid_pixel_centres_2d_from(grid_scaled_2d=grid)
+            plt.scatter(y=grid[:, 0], x=grid[:, 1], c="k", marker="x", s=10)
+
         plt.axis([0, image.shape[1], image.shape[0], 0])
         plt.axis("off")
         # if title:

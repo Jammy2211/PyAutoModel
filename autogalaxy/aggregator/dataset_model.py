@@ -47,16 +47,17 @@ def _dataset_model_from(
         except AttributeError:
             dataset_model = None
 
-    if len(fit.children) > 0:
-        logger.info(
-            """
-            Using database for a fit with multiple summed Analysis objects.
+    if fit.children is not None:
+        if len(fit.children) > 0:
+            logger.info(
+                """
+                Using database for a fit with multiple summed Analysis objects.
+    
+                DatasetModel objects do not fully support this yet (e.g. variables across Analysis objects may not be correct)
+                so proceed with caution!
+                """
+            )
 
-            DatasetModel objects do not fully support this yet (e.g. variables across Analysis objects may not be correct)
-            so proceed with caution!
-            """
-        )
-
-        return [dataset_model] * len(fit.children)
+            return [dataset_model] * len(fit.children)
 
     return [dataset_model]

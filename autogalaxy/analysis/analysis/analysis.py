@@ -60,7 +60,7 @@ class Analysis(af.Analysis):
             if getattr(instance, "extra_galaxies", None) is not None:
                 return Galaxies(
                     galaxies=instance.galaxies + instance.extra_galaxies,
-                    run_time_dict=run_time_dict
+                    run_time_dict=run_time_dict,
                 )
 
         return Galaxies(galaxies=instance.galaxies, run_time_dict=run_time_dict)
@@ -139,7 +139,7 @@ class Analysis(af.Analysis):
         An `info_dict` is also created which stores information on aspects of the model and dataset that dictate
         run times, so the profiled times can be interpreted with this context.
 
-        The results of this profiling are then output to hard-disk in the `prefiling` folder of the model-fit results,
+        The results of this profiling are then output to hard-disk in the `profiling` folder of the model-fit results,
         which they can be inspected to ensure run-times are as expected.
 
         Parameters
@@ -191,19 +191,19 @@ class Analysis(af.Analysis):
         fit.figure_of_merit
 
         try:
-            info_dict["image_pixels"] = self.dataset.grids.uniform.shape_slim
-            info_dict["sub_total_light_profiles"] = (
-                self.dataset.grids.uniform.over_sampler.sub_total
-            )
+            info_dict["image_pixels"] = self.dataset.grids.lp.shape_slim
+            info_dict[
+                "sub_total_light_profiles"
+            ] = self.dataset.grids.lp.over_sampler.sub_total
         except AttributeError:
             pass
 
         if fit.model_obj.has(cls=aa.Pixelization):
             info_dict["use_w_tilde"] = fit.inversion.settings.use_w_tilde
             try:
-                info_dict["sub_total_pixelization"] = (
-                    self.dataset.grids.pixelization.over_sampler.sub_total
-                )
+                info_dict[
+                    "sub_total_pixelization"
+                ] = self.dataset.grids.pixelization.over_sampler.sub_total
             except AttributeError:
                 pass
             info_dict["use_positive_only_solver"] = (

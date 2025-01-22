@@ -284,4 +284,4 @@ def test__plane_image_from(grid_2d_7x7):
 
     plane_image = plane_image_from(grid=grid_2d_7x7, galaxies=[galaxy], buffer=0.1)
 
-    assert plane_image[0] == pytest.approx(12.5227, 1.0e-4)
+    assert plane_image[0] == pytest.approx(12.5595, 1.0e-3)

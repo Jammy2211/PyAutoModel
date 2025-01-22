@@ -111,7 +111,7 @@ class FitInterferometerPlotter(Plotter):
         """
         return GalaxiesPlotter(
             galaxies=galaxies,
-            grid=self.fit.grids.uniform,
+            grid=self.fit.grids.lp,
             mat_plot_2d=self.mat_plot_2d,
             visuals_2d=self.get_visuals_2d_real_space(),
             include_2d=self.include_2d,

@@ -24,7 +24,7 @@ def test__galaxies(
 
     plotter_interface.galaxies(
         galaxies=galaxies_7x7,
-        grid=masked_imaging_7x7.grids.uniform,
+        grid=masked_imaging_7x7.grids.lp,
         during_analysis=False,
     )
 
@@ -57,7 +57,7 @@ def test__galaxies_1d(
 
     plotter_interface.galaxies_1d(
         galaxies=galaxies_7x7,
-        grid=masked_imaging_7x7.grids.uniform,
+        grid=masked_imaging_7x7.grids.lp,
         during_analysis=False,
     )
 
@@ -90,7 +90,10 @@ def test__inversion(
 
     assert path.join(plot_path, "reconstructed_image.png") in plot_patch.paths
     assert path.join(plot_path, "reconstruction.png") in plot_patch.paths
-    assert path.join(plot_path, "inversion", "errors.png") not in plot_patch.paths
+    assert (
+        path.join(plot_path, "inversion", "reconstruction_noise_map.png")
+        not in plot_patch.paths
+    )
     assert path.join(plot_path, "regularization_weights.png") not in plot_patch.paths
 
 

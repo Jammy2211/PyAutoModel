@@ -6,7 +6,7 @@ from autogalaxy import exc
 
 
 class Clicker:
-    def __init__(self, image, pixel_scales, search_box_size):
+    def __init__(self, image, pixel_scales, search_box_size, in_pixels: bool = False):
         self.image = image
 
         pixel_scales = aa.util.geometry.convert_pixel_scales_2d(
@@ -17,6 +17,7 @@ class Clicker:
         self.search_box_size = search_box_size
 
         self.click_list = []
+        self.in_pixels = in_pixels
 
     def onclick(self, event):
         if event.dblclick:
@@ -46,17 +47,21 @@ class Clicker:
                         y_pixels_max = y
                         x_pixels_max = x
 
-            grid_arcsec = self.image.geometry.grid_scaled_2d_from(
-                grid_pixels_2d=aa.Grid2D.no_mask(
-                    values=[[[y_pixels_max + 0.5, x_pixels_max + 0.5]]],
-                    pixel_scales=self.pixel_scales,
+                print("clicked on the pixel:", y_pixels, x_pixels)
+                print("Max flux pixel:", y_pixels_max, x_pixels_max)
+
+            if self.in_pixels:
+                self.click_list.append((y_pixels_max, x_pixels_max))
+            else:
+                grid_arcsec = self.image.geometry.grid_scaled_2d_from(
+                    grid_pixels_2d=aa.Grid2D.no_mask(
+                        values=[[[y_pixels_max + 0.5, x_pixels_max + 0.5]]],
+                        pixel_scales=self.pixel_scales,
+                    )
                 )
-            )
-            y_arcsec = grid_arcsec[0, 0]
-            x_arcsec = grid_arcsec[0, 1]
+                y_arcsec = grid_arcsec[0, 0]
+                x_arcsec = grid_arcsec[0, 1]
 
-            print("clicked on the pixel:", y_pixels, x_pixels)
-            print("Max flux pixel:", y_pixels_max, x_pixels_max)
-            print("Arc-sec Coordinate", y_arcsec, x_arcsec)
+                print("Arc-sec Coordinate", y_arcsec, x_arcsec)
 
-            self.click_list.append((y_arcsec, x_arcsec))
+                self.click_list.append((y_arcsec, x_arcsec))

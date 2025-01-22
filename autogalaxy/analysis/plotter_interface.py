@@ -318,7 +318,7 @@ class PlotterInterface:
             reconstructed_image=should_plot("reconstructed_image"),
             reconstruction=should_plot("reconstruction"),
             mesh_pixels_per_image_pixels=should_plot("mesh_pixels_per_image_pixels"),
-            errors=should_plot("errors"),
+            reconstruction_noise_map=should_plot("reconstruction_noise_map"),
             regularization_weights=should_plot("regularization_weights"),
         )
 
@@ -347,7 +347,7 @@ class PlotterInterface:
                 pixelization_index=0,
                 reconstructed_image=True,
                 reconstruction=True,
-                errors=True,
+                reconstruction_noise_map=True,
                 regularization_weights=True,
             )
 
@@ -366,7 +366,7 @@ class PlotterInterface:
                 pixelization_index=0,
                 reconstructed_image=True,
                 reconstruction=True,
-                errors=True,
+                reconstruction_noise_map=True,
                 regularization_weights=True,
                 interpolate_to_uniform=True,
             )

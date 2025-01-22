@@ -280,7 +280,7 @@ class GetVisuals2D(aplt.GetVisuals2D):
         visuals_2d_via_fit = super().via_fit_imaging_from(fit=fit)
 
         visuals_2d_via_light_mass_obj = self.via_light_mass_obj_from(
-            light_mass_obj=fit.galaxies, grid=fit.grids.uniform
+            light_mass_obj=fit.galaxies, grid=fit.grids.lp
         )
 
         return visuals_2d_via_fit + visuals_2d_via_light_mass_obj

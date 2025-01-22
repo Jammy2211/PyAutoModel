@@ -30,6 +30,7 @@ class MatPlot2D(aplt.MatPlot2D):
         vector_yx_quiver: Optional[aplt.VectorYXQuiver] = None,
         patch_overlay: Optional[aplt.PatchOverlay] = None,
         interpolated_reconstruction: Optional[aplt.InterpolatedReconstruction] = None,
+        delaunay_drawer: Optional[aplt.DelaunayDrawer] = None,
         voronoi_drawer: Optional[aplt.VoronoiDrawer] = None,
         origin_scatter: Optional[aplt.OriginScatter] = None,
         mask_scatter: Optional[aplt.MaskScatter] = None,
@@ -120,6 +121,8 @@ class MatPlot2D(aplt.MatPlot2D):
         voronoi_drawer
             Interpolations the reconstruction of a `Mapper` object from its irregular grid (e.g. Delaunay, Voronoi) to a
             uniform 2D array and plots it via `plt.imshow()`.
+        delaunay_drawer
+            Draws a colored Delaunay mesh of pixels using `plt.tripcolor`.
         voronoi_drawer
             Draws a colored Voronoi mesh of pixels using `plt.fill`.
         origin_scatter
@@ -203,6 +206,7 @@ class MatPlot2D(aplt.MatPlot2D):
             contour=contour,
             grid_plot=grid_plot,
             interpolated_reconstruction=interpolated_reconstruction,
+            delaunay_drawer=delaunay_drawer,
             voronoi_drawer=voronoi_drawer,
             use_log10=use_log10,
         )

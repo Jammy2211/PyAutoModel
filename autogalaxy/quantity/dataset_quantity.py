@@ -14,7 +14,8 @@ class DatasetQuantity(AbstractDataset):
         self,
         data: Union[aa.Array2D, aa.VectorYX2D],
         noise_map: Union[aa.Array2D, aa.VectorYX2D],
-        over_sampling: Optional[aa.OverSamplingDataset] = aa.OverSamplingDataset(),
+        over_sample_size_lp: Union[int, aa.Array2D] = 4,
+        over_sample_size_pixelization: Union[int, aa.Array2D] = 4,
     ):
         """
         A quantity dataset, which represents a derived quantity of a light profile, mass profile, galaxy or galaxies
@@ -57,10 +58,13 @@ class DatasetQuantity(AbstractDataset):
             An array describing the RMS standard deviation error in each pixel used for computing quantities like the
             chi-squared in a fit, which is often chosen in an arbitrary way for a quantity dataset given the quantities
             are not observed using real astronomical instruments.
-        over_sampling
-            The over sampling schemes which divide the grids into sub grids of smaller pixels within their host image
-            pixels when using the grid to evaluate a function (e.g. images) to better approximate the 2D line integral
-            This class controls over sampling for all the different grids (e.g. `grid`, `grids.pixelization).
+        over_sample_size_lp
+            The over sampling scheme size, which divides the grid into a sub grid of smaller pixels when computing
+            values (e.g. images) from the grid to approximate the 2D line integral of the amount of light that falls
+            into each pixel.
+        over_sample_size_pixelization
+            How over sampling is performed for the grid which is associated with a pixelization, which is therefore
+            passed into the calculations performed in the `inversion` module.
         """
         if data.shape != noise_map.shape:
             if data.shape[0:-1] == noise_map.shape[0:]:
@@ -76,7 +80,8 @@ class DatasetQuantity(AbstractDataset):
         super().__init__(
             data=data,
             noise_map=noise_map,
-            over_sampling=over_sampling,
+            over_sample_size_lp=over_sample_size_lp,
+            over_sample_size_pixelization=over_sample_size_pixelization,
         )
 
     @classmethod
@@ -84,7 +89,8 @@ class DatasetQuantity(AbstractDataset):
         cls,
         data: Union[aa.Array2D, aa.VectorYX2D],
         signal_to_noise_map: Union[aa.Array2D],
-        over_sampling: Optional[aa.OverSamplingIterate] = None,
+        over_sample_size_lp: Union[int, aa.Array2D] = 4,
+        over_sample_size_pixelization: Union[int, aa.Array2D] = 4,
     ):
         """
         Represents a derived quantity of a light profile, mass profile, galaxy or galaxies as a dataset that can be
@@ -100,6 +106,13 @@ class DatasetQuantity(AbstractDataset):
             The data of the quantity (e.g. 2D convergence, 2D potential, 2D deflections) that is fitted.
         signal_to_noise_map
             The 2D signal to noise map of the quantity's data.
+        over_sample_size_lp
+            The over sampling scheme size, which divides the grid into a sub grid of smaller pixels when computing
+            values (e.g. images) from the grid to approximate the 2D line integral of the amount of light that falls
+            into each pixel.
+        over_sample_size_pixelization
+            How over sampling is performed for the grid which is associated with a pixelization, which is therefore
+            passed into the calculations performed in the `inversion` module.
         """
         try:
             noise_map = data / signal_to_noise_map
@@ -117,7 +130,8 @@ class DatasetQuantity(AbstractDataset):
         return DatasetQuantity(
             data=data,
             noise_map=noise_map,
-            over_sampling=over_sampling,
+            over_sample_size_lp=over_sample_size_lp,
+            over_sample_size_pixelization=over_sample_size_pixelization,
         )
 
     @property
@@ -133,7 +147,8 @@ class DatasetQuantity(AbstractDataset):
             return DatasetQuantity(
                 data=self.data.y,
                 noise_map=self.noise_map.y,
-                over_sampling=self.over_sampling,
+                over_sample_size_lp=self.over_sample_size_lp,
+                over_sample_size_pixelization=self.over_sample_size_pixelization,
             )
 
     @property
@@ -149,7 +164,8 @@ class DatasetQuantity(AbstractDataset):
             return DatasetQuantity(
                 data=self.data.x,
                 noise_map=self.noise_map.x,
-                over_sampling=self.over_sampling,
+                over_sample_size_lp=self.over_sample_size_lp,
+                over_sample_size_pixelization=self.over_sample_size_pixelization,
             )
 
     def apply_mask(self, mask: aa.Mask2D) -> "DatasetQuantity":
@@ -172,11 +188,16 @@ class DatasetQuantity(AbstractDataset):
 
         data = self.data.apply_mask(mask=mask)
         noise_map = self.noise_map.apply_mask(mask=mask)
+        over_sample_size_lp = self.over_sample_size_lp.apply_mask(mask=mask)
+        over_sample_size_pixelization = self.over_sample_size_pixelization.apply_mask(
+            mask=mask
+        )
 
         dataset = DatasetQuantity(
             data=data,
             noise_map=noise_map,
-            over_sampling=self.over_sampling,
+            over_sample_size_lp=over_sample_size_lp,
+            over_sample_size_pixelization=over_sample_size_pixelization,
         )
 
         dataset.unmasked = unmasked_dataset

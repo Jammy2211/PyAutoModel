@@ -199,11 +199,6 @@ class AnalysisEllipse(af.Analysis):
             hdu=self.dataset.mask.hdu_for_output,
             prefix="dataset",
         )
-        paths.save_json(
-            name="over_sampling",
-            object_dict=to_dict(self.dataset.over_sampling),
-            prefix="dataset",
-        )
 
     def profile_log_likelihood_function(
         self, instance: af.ModelInstance, paths: Optional[af.DirectoryPaths] = None

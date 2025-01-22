@@ -421,7 +421,7 @@ plots:
   inversion:
     all_at_end_png: false
     chi_squared_map: true
-    errors: false
+    reconstruction_noise_map: false
     interpolated_errors: true
     interpolated_reconstruction: true
     normalized_residual_map: false

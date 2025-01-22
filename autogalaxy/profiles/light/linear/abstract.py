@@ -244,8 +244,6 @@ class LightProfileLinearObjFuncList(aa.AbstractLinearObjFuncList):
         -------
         The number of pixels in the mask of the grid.
         """
-        if isinstance(self.grid, aa.Grid2DOverSampled):
-            return self.grid.pixels_in_mask
         return self.grid.mask.pixels_in_mask
 
     @property

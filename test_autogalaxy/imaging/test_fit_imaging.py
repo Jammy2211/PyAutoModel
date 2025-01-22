@@ -237,13 +237,13 @@ def test__galaxy_model_image_dict(masked_imaging_7x7):
     fit = ag.FitImaging(dataset=masked_imaging_7x7, galaxies=[g0, g1, g2, g3])
 
     g0_blurred_image_2d = g0.blurred_image_2d_from(
-        grid=masked_imaging_7x7.grids.uniform,
+        grid=masked_imaging_7x7.grids.lp,
         blurring_grid=masked_imaging_7x7.grids.blurring,
         convolver=masked_imaging_7x7.convolver,
     )
 
     g1_blurred_image_2d = g1.blurred_image_2d_from(
-        grid=masked_imaging_7x7.grids.uniform,
+        grid=masked_imaging_7x7.grids.lp,
         blurring_grid=masked_imaging_7x7.grids.blurring,
         convolver=masked_imaging_7x7.convolver,
     )
@@ -426,14 +426,14 @@ def test___unmasked_blurred_images(masked_imaging_7x7):
     fit = ag.FitImaging(dataset=masked_imaging_7x7, galaxies=[g0, g1])
 
     unmasked_blurred_image = galaxies.unmasked_blurred_image_2d_from(
-        grid=masked_imaging_7x7.grids.uniform, psf=masked_imaging_7x7.psf
+        grid=masked_imaging_7x7.grids.lp, psf=masked_imaging_7x7.psf
     )
 
     assert (fit.unmasked_blurred_image == unmasked_blurred_image).all()
 
     unmasked_blurred_image_of_galaxies_list = (
         galaxies.unmasked_blurred_image_2d_list_from(
-            grid=masked_imaging_7x7.grids.uniform, psf=masked_imaging_7x7.psf
+            grid=masked_imaging_7x7.grids.lp, psf=masked_imaging_7x7.psf
         )
     )
 

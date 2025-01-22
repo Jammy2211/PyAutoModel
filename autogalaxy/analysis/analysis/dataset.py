@@ -103,9 +103,14 @@ class AnalysisDataset(Analysis):
             hdu=self.dataset.noise_map.hdu_for_output,
             prefix="dataset",
         )
-        paths.save_json(
-            name="over_sampling",
-            object_dict=to_dict(self.dataset.over_sampling),
+        paths.save_fits(
+            name="over_sample_size_lp",
+            hdu=self.dataset.grids.lp.over_sample_size.native.hdu_for_output,
+            prefix="dataset",
+        )
+        paths.save_fits(
+            name="over_sample_size_pixelization",
+            hdu=self.dataset.grids.pixelization.over_sample_size.native.hdu_for_output,
             prefix="dataset",
         )
         paths.save_json(

@@ -621,8 +621,8 @@ class OperateDeflections:
         if len(einstein_radii_list) > 1:
             logger.info(
                 """
-                There are multiple tangential critical curves, and the computed Einstein radius is the sum of 
-                all of them. Check the `einstein_radius_list_from` function for the individual Einstein. 
+                There are multiple tangential critical curves, and the computed Einstein radius is the sum of
+                all of them. Check the `einstein_radius_list_from` function for the individual Einstein.
             """
             )
 
@@ -704,14 +704,14 @@ class OperateDeflections:
         if len(einstein_mass_angular_list) > 1:
             logger.info(
                 """
-                There are multiple tangential critical curves, and the computed Einstein mass is the sum of 
-                all of them. Check the `einstein_mass_list_from` function for the individual Einstein. 
+                There are multiple tangential critical curves, and the computed Einstein mass is the sum of
+                all of them. Check the `einstein_mass_list_from` function for the individual Einstein.
             """
             )
 
         return einstein_mass_angular_list[0]
 
-    def jacobian_from(self, grid):
+    def jacobian_from(self, grid, plane_i=0, plane_j=-1):
         """
         Returns the Jacobian of the lensing object, which is computed by taking the gradient of the 2D deflection
         angle map in four direction (positive y, negative y, positive x, negative x).
@@ -729,7 +729,8 @@ class OperateDeflections:
             The 2D grid of (y,x) arc-second coordinates the deflection angles and Jacobian are computed on.
         """
 
-        deflections = self.deflections_yx_2d_from(grid=grid)
+        #deflections = self.deflections_yx_2d_from(grid=grid)
+        deflections = self.deflections_between_planes_from(grid=grid, plane_i=plane_i, plane_j=plane_j)
 
         # TODO : Can probably make this work on irregular grid? Is there any point?
 
